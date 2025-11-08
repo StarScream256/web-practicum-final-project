@@ -24,6 +24,7 @@ return new class extends Migration {
                 ->restrictOnDelete();
             $table->string('specialization');
             $table->text('bio')->nullable();
+            $table->string('picture')->nullable();
             $table->timestamps();
         });
     }

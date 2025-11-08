@@ -24,7 +24,7 @@ export default function Register() {
                 className="flex w-full items-center justify-center"
             >
                 {({ processing, errors }) => (
-                    <div className="flex w-full flex-col gap-6 lg:w-1/2">
+                    <div className="flex w-full flex-col gap-6 lg:w-2/3">
                         <div className="flex w-full flex-col gap-6 md:flex-row">
                             <div className="flex w-full flex-col gap-6">
                                 <div className="grid gap-2">
