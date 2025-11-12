@@ -38,7 +38,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return DB::transaction(function () use ($input) {
-            $role = Role::where('role', 'user')->first();
+            $role = Role::where('name', 'user')->first();
             $user = User::create([
                 'email' => $input['email'],
                 'password' => $input['password'],
