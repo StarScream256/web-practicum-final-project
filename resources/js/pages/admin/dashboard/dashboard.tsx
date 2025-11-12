@@ -1,8 +1,10 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+import { Search } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,19 +18,53 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
+                {/* Stat bar */}
+                <div className="grid h-fit w-full grid-cols-4 gap-5">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="line-clamp-1">
+                                Appointments today
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>as</CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="line-clamp-1">
+                                Appointments this month
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>as</CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="line-clamp-1">
+                                Total patients
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>as</CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="line-clamp-1">
+                                Total staff
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>as</CardContent>
+                    </Card>
                 </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+
+                {/* Search bar */}
+                <div className="flex h-fit w-full gap-5">
+                    <form className="relative flex h-fit w-full items-center justify-between rounded-lg">
+                        <Input placeholder="Search appointment" />
+                        <button
+                            type="submit"
+                            className="absolute right-1 rounded-md p-1"
+                        >
+                            <Search className="w-5 text-primary" />
+                        </button>
+                    </form>
                 </div>
             </div>
         </AppLayout>

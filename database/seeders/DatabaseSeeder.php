@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\JobTitle;
 use App\Models\Role;
+use App\Models\Staff;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,17 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([RoleSeeder::class, JobTitleSeeder::class]);
 
-        // User::firstOrCreate(
-        //     ['email' => 'test@example.com'],
-        //     [
-        //         'password' => Hash::make('password'),
-        //         'email_verified_at' => now(),
-        //     ],
-        // );
-
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'user']);
+        $this->call([AdminUserSeeder::class, UserSeeder::class]);
     }
 }

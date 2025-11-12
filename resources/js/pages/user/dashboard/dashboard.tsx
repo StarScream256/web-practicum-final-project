@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ClipboardPlus, Search } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -29,10 +29,12 @@ export default function Dashboard() {
                             <Search className="w-5 text-primary" />
                         </button>
                     </form>
-                    <Button variant="default">
-                        <ClipboardPlus />
-                        Make Appointment
-                    </Button>
+                    <Link href={route('user.appointment.create')}>
+                        <Button variant={'default'}>
+                            <ClipboardPlus />
+                            Create Appointment
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </AppLayout>

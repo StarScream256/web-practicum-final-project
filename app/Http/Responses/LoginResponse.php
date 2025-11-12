@@ -11,7 +11,7 @@ class LoginResponse implements LoginResponseContract
     {
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
+        if ($user->role->name === 'admin') {
             return redirect()->intended('/admin/dashboard');
         }
 

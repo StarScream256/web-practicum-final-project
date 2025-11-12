@@ -15,6 +15,7 @@ class Staff extends Model
         'job_title_id',
         'specialization',
         'picture',
+        'bio',
     ];
 
     public function user(): BelongsTo

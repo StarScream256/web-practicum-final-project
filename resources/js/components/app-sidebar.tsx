@@ -13,7 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, LayoutGrid } from 'lucide-react';
+import { BookOpen, Contact, LayoutGrid, User } from 'lucide-react';
 import React from 'react';
 import AppLogo from './app-logo';
 
@@ -26,6 +26,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: 'Admin Dashboard',
             href: route('admin.dashboard'),
             icon: LayoutGrid,
+        },
+        {
+            title: 'Patients',
+            href: '',
+            icon: User,
+        },
+        {
+            title: 'Staff',
+            href: route('admin.staff.index'),
+            icon: Contact,
         },
     ];
 
@@ -55,7 +65,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link
+                                href={
+                                    user.role === 'admin'
+                                        ? route('admin.dashboard')
+                                        : route('dashboard')
+                                }
+                                prefetch
+                            >
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
