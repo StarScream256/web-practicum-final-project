@@ -61,7 +61,7 @@ export default function Create() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Staff" />
-            <form className="gap-10s grid h-full grid-cols-2 overflow-x-auto rounded-xl p-4">
+            <form className="grid h-full grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4">
                 {/* general */}
                 <div className="flex w-full flex-col gap-5">
                     <p className="text-sm font-medium text-gray-500">
