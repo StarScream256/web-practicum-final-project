@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules;
@@ -71,7 +72,7 @@ class StaffController extends Controller
         });
 
         return to_route('admin.staff.index')->with(
-            'message',
+            'success',
             'Staff created successfully.',
         );
     }
@@ -93,7 +94,64 @@ class StaffController extends Controller
         ]);
     }
 
-    public function update(Request $request, Staff $staff) {}
+    public function update(Request $request, Staff $staff)
+    {
+        $user = $staff->user;
 
-    public function destroy(Staff $staff) {}
+        $request->validate([
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique(User::class)->ignore($user->id),
+            ],
+            'password' => ['nullable', Rules\Password::defaults()],
+            'name' => ['required', 'string', 'max:255'],
+            'job_title_id' => ['required', 'exists:job_titles,id'],
+            'salutation' => ['nullable'],
+            'specialization' => ['required'],
+            'picture' => ['nullable'],
+            'bio' => ['nullable', 'string'],
+        ]);
+
+        DB::transaction(function () use ($request, $user, $staff) {
+            $staff->update([
+                'name' => $request->name,
+                'job_title_id' => $request->job_title_id,
+                'specialization' => $request->specialization,
+                'salutation' => $request->salutation,
+                'bio' => $request->bio,
+            ]);
+
+            $user->update([
+                'email' => $request->email,
+            ]);
+
+            if ($request->filled('password')) {
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
+            }
+        });
+
+        return to_route('admin.staff.index')->with(
+            'success',
+            'Staff updated successfully.',
+        );
+    }
+
+    public function destroy(Staff $staff)
+    {
+        DB::transaction(function () use ($staff) {
+            $user = $staff->user;
+            $staff->delete();
+            $user->delete();
+        });
+        return to_route('admin.staff.index')->with(
+            'success',
+            'Staff deleted successfully.',
+        );
+    }
 }

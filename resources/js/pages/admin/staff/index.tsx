@@ -1,4 +1,14 @@
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -11,10 +21,13 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes/admin';
 import {
     create as adminStaffCreate,
+    destroy as adminStaffDestroy,
     edit as adminStaffEdit,
+    show as adminStaffShow,
 } from '@/routes/admin/staff';
+import { show as adminStaffAvailShow } from '@/routes/admin/staff-availability';
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     flexRender,
@@ -58,6 +71,12 @@ interface StaffMember {
     salutation: string;
     bio: string;
     picture: string;
+    user: {
+        email: string;
+    };
+    job_title: {
+        title: string;
+    };
 }
 
 interface StaffPageProps extends PageProps {
@@ -92,20 +111,61 @@ const columns: ColumnDef<StaffMember>[] = [
         id: 'actions',
         header: 'Action',
         enableSorting: false,
-        cell: (info) => {
-            const staffMember = info.row.original;
+        cell: ({ row }) => {
+            const staffMember = row.original;
+
+            const handleDelete = () => {
+                router.delete(adminStaffDestroy({ staff: staffMember.id }), {
+                    preserveState: true,
+                    preserveScroll: true,
+                });
+            };
+
             return (
                 <span className="flex h-fit w-fit items-center gap-3">
-                    <Link href={''}>
+                    <Link href={adminStaffShow({ staff: staffMember.id }).url}>
                         <View size={18} />
                     </Link>
-                    <Link href={''}>
-                        <Pencil size={18} />
-                    </Link>
                     <Link href={adminStaffEdit({ staff: staffMember.id }).url}>
-                        <Trash size={18} />
+                        <Pencil className="text-blue-500" size={18} />
                     </Link>
-                    <Link href={''}>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <button className="cursor-pointer text-red-500">
+                                <span className="sr-only">Delete</span>
+                                <Trash size={18} />
+                            </button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    Are you absolutely sure?
+                                </DialogTitle>
+                                <DialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete the staff member{' '}
+                                    <strong>{staffMember.name}</strong> and
+                                    their associated user account.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleDelete}
+                                >
+                                    Yes, delete
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <Link
+                        href={
+                            adminStaffAvailShow({ staffId: staffMember.id }).url
+                        }
+                    >
                         <CalendarCheck size={18} />
                     </Link>
                 </span>
@@ -116,7 +176,6 @@ const columns: ColumnDef<StaffMember>[] = [
 
 export default function Index() {
     const { auth, staff } = usePage<StaffPageProps>().props;
-    console.log(usePage().props);
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');

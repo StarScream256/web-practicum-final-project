@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\Admin\StaffAvailabilityController as AdminStaffAvailabilityController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -63,11 +64,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminStaffController::class,
                         'edit',
                     ])->name('edit');
+                    Route::patch('{staff}/update', [
+                        AdminStaffController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{staff}', [
+                        AdminStaffController::class,
+                        'destroy',
+                    ])->name('destroy');
                 });
 
             Route::prefix('staff-availability')
                 ->name('staff-availability.')
-                ->group(function () {});
+                ->group(function () {
+                    Route::get('{staffId}/show', [
+                        AdminStaffAvailabilityController::class,
+                        'show',
+                    ])->name('show');
+                });
         });
 });
 

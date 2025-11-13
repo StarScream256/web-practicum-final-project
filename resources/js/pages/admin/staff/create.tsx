@@ -65,7 +65,7 @@ export default function Create() {
             <Head title="Create Staff" />
             <form
                 onSubmit={handleSubmit}
-                className="grid h-full grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4"
+                className="grid h-fit grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4"
             >
                 {/* general */}
                 <div className="flex w-full flex-col gap-5">
@@ -226,4 +226,3 @@ export default function Create() {
         </AppLayout>
     );
 }
-Label;
