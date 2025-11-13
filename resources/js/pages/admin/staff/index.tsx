@@ -29,6 +29,7 @@ import {
     ArrowDown,
     ArrowUp,
     ArrowUpDown,
+    CalendarCheck,
     Contact,
     Pencil,
     Search,
@@ -104,6 +105,9 @@ const columns: ColumnDef<StaffMember>[] = [
                     <Link href={adminStaffEdit({ staff: staffMember.id }).url}>
                         <Trash size={18} />
                     </Link>
+                    <Link href={''}>
+                        <CalendarCheck size={18} />
+                    </Link>
                 </span>
             );
         },
@@ -112,6 +116,7 @@ const columns: ColumnDef<StaffMember>[] = [
 
 export default function Index() {
     const { auth, staff } = usePage<StaffPageProps>().props;
+    console.log(usePage().props);
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');

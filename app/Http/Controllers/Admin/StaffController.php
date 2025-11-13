@@ -43,7 +43,7 @@ class StaffController extends Controller
                 'max:255',
                 'unique:' . User::class,
             ],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
             'name' => ['required', 'string', 'max:255'],
             'job_title_id' => ['required', 'exists:job_titles,id'],
             'salutation' => ['nullable'],

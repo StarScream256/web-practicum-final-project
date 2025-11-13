@@ -51,6 +51,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminStaffController::class,
                         'create',
                     ])->name('create');
+                    Route::post('store', [
+                        AdminStaffController::class,
+                        'store',
+                    ])->name('store');
                     Route::get('{staff}/show', [
                         AdminStaffController::class,
                         'show',
@@ -60,6 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         'edit',
                     ])->name('edit');
                 });
+
+            Route::prefix('staff-availability')
+                ->name('staff-availability.')
+                ->group(function () {});
         });
 });
 

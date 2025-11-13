@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Staff extends Model
 {
@@ -26,5 +27,10 @@ class Staff extends Model
     public function jobTitle(): BelongsTo
     {
         return $this->belongsTo(JobTitle::class);
+    }
+
+    public function staffAvailabilities(): HasMany
+    {
+        return $this->hasMany(StaffAvailability::class);
     }
 }

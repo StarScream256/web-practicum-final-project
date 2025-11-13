@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -9,7 +10,10 @@ import {
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes/admin';
-import { index as adminStaffIndex } from '@/routes/admin/staff';
+import {
+    index as adminStaffIndex,
+    store as adminStaffStore,
+} from '@/routes/admin/staff';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 
@@ -45,7 +49,6 @@ export default function Create() {
         name: '',
         email: '',
         password: '',
-        password_confirmation: '',
         job_title_id: '',
         specialization: '',
         salutation: '',
@@ -54,14 +57,16 @@ export default function Create() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        // todo: update this to your store route
-        // post(route('admin.staff.store'));
+        post(adminStaffStore().url);
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Staff" />
-            <form className="grid h-full grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4">
+            <form
+                onSubmit={handleSubmit}
+                className="grid h-full grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4"
+            >
                 {/* general */}
                 <div className="flex w-full flex-col gap-5">
                     <p className="text-sm font-medium text-gray-500">
@@ -78,6 +83,11 @@ export default function Create() {
                             onChange={(e) => setData('name', e.target.value)}
                             required
                         />
+                        {errors.name && (
+                            <p className="text-sm text-red-500">
+                                {errors.name}
+                            </p>
+                        )}
                     </div>
                     {/* job title */}
                     <div className="flex h-fit w-full flex-col gap-1.5">
@@ -120,6 +130,11 @@ export default function Create() {
                                 setData('specialization', e.target.value)
                             }
                         />
+                        {errors.specialization && (
+                            <p className="text-sm text-red-500">
+                                {errors.specialization}
+                            </p>
+                        )}
                     </div>
                     {/* salutation */}
                     <div className="flex h-fit w-full flex-col gap-1.5">
@@ -134,6 +149,11 @@ export default function Create() {
                                 setData('salutation', e.target.value)
                             }
                         />
+                        {errors.salutation && (
+                            <p className="text-sm text-red-500">
+                                {errors.salutation}
+                            </p>
+                        )}
                     </div>
                     {/* bio */}
                     <div className="flex h-fit w-full flex-col gap-1.5">
@@ -144,6 +164,9 @@ export default function Create() {
                             placeholder="Enter bio"
                             onChange={(e) => setData('bio', e.target.value)}
                         />
+                        {errors.bio && (
+                            <p className="text-sm text-red-500">{errors.bio}</p>
+                        )}
                     </div>
                 </div>
 
@@ -162,7 +185,13 @@ export default function Create() {
                             autoComplete="off"
                             placeholder="Enter email address"
                             required
+                            onChange={(e) => setData('email', e.target.value)}
                         />
+                        {errors.email && (
+                            <p className="text-sm text-red-500">
+                                {errors.email}
+                            </p>
+                        )}
                     </div>
                     <div className="flex h-fit w-full flex-col gap-1.5">
                         <Label htmlFor="password">Password</Label>
@@ -173,15 +202,25 @@ export default function Create() {
                             autoComplete="new-password"
                             placeholder="Enter password"
                             required
+                            onChange={(e) =>
+                                setData('password', e.target.value)
+                            }
                         />
+                        {errors.password && (
+                            <p className="text-sm text-red-500">
+                                {errors.password}
+                            </p>
+                        )}
                     </div>
                 </div>
 
-                {/* work schedule */}
-                <div className="flex w-full flex-col gap-3">
-                    <p className="text-sm font-medium text-gray-500">
-                        Work schedule
-                    </p>
+                <div className="col-span-2 flex w-full justify-center gap-5">
+                    <Button type="reset" variant={'outline'}>
+                        Reset
+                    </Button>
+                    <Button type="submit" variant={'default'}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </AppLayout>

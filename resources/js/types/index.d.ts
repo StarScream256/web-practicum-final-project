@@ -55,10 +55,17 @@ export interface User {
     [key: string]: unknown;
 }
 
+export type FlashProps = {
+    message?: string;
+    error?: string;
+    success?: string;
+};
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
         user: User;
     };
+    flash: FlashProps;
 };
