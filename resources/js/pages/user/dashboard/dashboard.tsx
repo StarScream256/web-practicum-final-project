@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
+import { create as userAppointmentCreate } from '@/routes/user/appointment';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ClipboardPlus, Search } from 'lucide-react';
@@ -20,16 +21,16 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {/* Search bar */}
                 <div className="flex h-fit w-full gap-5">
-                    <form className="relative flex h-fit w-full items-center justify-between rounded-lg">
-                        <Input placeholder="Search appointment" />
-                        <button
-                            type="submit"
-                            className="absolute right-1 rounded-md p-1"
-                        >
-                            <Search className="w-5 text-primary" />
-                        </button>
-                    </form>
-                    <Link href={route('user.appointment.create')}>
+                    <div className="relative h-fit w-full">
+                        <Input
+                            placeholder="Search staff"
+                            value={''}
+                            onChange={(e) => {}}
+                            className="pl-10"
+                        />
+                        <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
+                    </div>
+                    <Link href={userAppointmentCreate()}>
                         <Button variant={'default'}>
                             <ClipboardPlus />
                             Create Appointment

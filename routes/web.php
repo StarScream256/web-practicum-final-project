@@ -39,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 return Inertia::render('admin/dashboard/dashboard');
             })->name('dashboard');
 
-            // URL: /admin/dashboard/staff
+            // URL: /admin/dashboard/staff/...
             Route::prefix('staff')
                 ->name('staff.')
                 ->group(function () {
@@ -47,6 +47,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminStaffController::class,
                         'index',
                     ])->name('index');
+                    Route::get('create', [
+                        AdminStaffController::class,
+                        'create',
+                    ])->name('create');
+                    Route::get('{staff}/show', [
+                        AdminStaffController::class,
+                        'show',
+                    ])->name('show');
+                    Route::get('{staff}/edit', [
+                        AdminStaffController::class,
+                        'edit',
+                    ])->name('edit');
                 });
         });
 });

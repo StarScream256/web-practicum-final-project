@@ -54,17 +54,17 @@ export default function Dashboard() {
                     </Card>
                 </div>
 
-                {/* Search bar */}
+                {/* search bar */}
                 <div className="flex h-fit w-full gap-5">
-                    <form className="relative flex h-fit w-full items-center justify-between rounded-lg">
-                        <Input placeholder="Search appointment" />
-                        <button
-                            type="submit"
-                            className="absolute right-1 rounded-md p-1"
-                        >
-                            <Search className="w-5 text-primary" />
-                        </button>
-                    </form>
+                    <div className="relative h-fit w-full">
+                        <Input
+                            placeholder="Search staff"
+                            value={''}
+                            onChange={(e) => {}}
+                            className="pl-10"
+                        />
+                        <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
+                    </div>
                 </div>
             </div>
         </AppLayout>

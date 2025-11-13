@@ -1,16 +1,17 @@
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
+import { dashboard as userDashboard } from '@/routes';
+import { create as userAppointmentCreate } from '@/routes/user/appointment';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard().url,
+        href: userDashboard().url,
     },
     {
         title: 'Make Appointment',
-        href: route('user.appointment.create'),
+        href: userAppointmentCreate().url,
     },
 ];
 

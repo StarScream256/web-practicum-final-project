@@ -10,7 +10,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard as userDashboard } from '@/routes';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Contact, LayoutGrid, User } from 'lucide-react';
@@ -24,7 +26,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const adminNavItems: NavItem[] = [
         {
             title: 'Admin Dashboard',
-            href: route('admin.dashboard'),
+            href: adminDashboard(),
             icon: LayoutGrid,
         },
         {
@@ -34,17 +36,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Staff',
-            href: route('admin.staff.index'),
+            href: adminStaffIndex(),
             icon: Contact,
         },
     ];
 
-    console.log(user);
-
     const userNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: dashboard(),
+            href: userDashboard(),
             icon: LayoutGrid,
         },
     ];
@@ -68,8 +68,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             <Link
                                 href={
                                     user.role === 'admin'
-                                        ? route('admin.dashboard')
-                                        : route('dashboard')
+                                        ? adminDashboard()
+                                        : userDashboard()
                                 }
                                 prefetch
                             >
