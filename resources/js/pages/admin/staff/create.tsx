@@ -61,126 +61,127 @@ export default function Create() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Staff" />
-            <form className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                {/* staff information */}
-                <div className="flex w-full gap-5">
-                    {/* general */}
-                    <div className="flex w-full flex-col gap-5">
-                        <p className="text-sm font-medium text-gray-500">
-                            General information
-                        </p>
+            <form className="gap-10s grid h-full grid-cols-2 overflow-x-auto rounded-xl p-4">
+                {/* general */}
+                <div className="flex w-full flex-col gap-5">
+                    <p className="text-sm font-medium text-gray-500">
+                        General information
+                    </p>
 
-                        {/* name */}
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="name">Name</Label>
-                            <Input
-                                id="name"
-                                name="name"
-                                placeholder="Enter full name"
-                                onChange={(e) =>
-                                    setData('name', e.target.value)
-                                }
-                                required
-                            />
-                        </div>
-                        {/* job title */}
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="job_title_id">Job title</Label>
-                            <Select
-                                required
-                                value={data.job_title_id}
-                                onValueChange={(value) =>
-                                    setData('job_title_id', value)
-                                }
-                            >
-                                <SelectTrigger id="job_title_id">
-                                    <SelectValue placeholder="Select a job title" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {jobTitles.map((job) => (
-                                        <SelectItem
-                                            key={job.id}
-                                            value={job.id.toString()}
-                                        >
-                                            {job.title}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.job_title_id && (
-                                <p className="text-sm text-red-500">
-                                    {errors.job_title_id}
-                                </p>
-                            )}
-                        </div>
-                        {/* specialization */}
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="specialization">
-                                Specialization
-                            </Label>
-                            <Input
-                                id="specialization"
-                                name="specialization"
-                                placeholder="Enter specialization"
-                                onChange={(e) =>
-                                    setData('specialization', e.target.value)
-                                }
-                            />
-                        </div>
-                        {/* salutation */}
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="salutation">
-                                Salutation (optional)
-                            </Label>
-                            <Input
-                                id="salutation"
-                                name="salutation"
-                                placeholder="Enter salutation e.g. dr."
-                                onChange={(e) =>
-                                    setData('salutation', e.target.value)
-                                }
-                            />
-                        </div>
-                        {/* bio */}
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="bio">Bio (optional)</Label>
-                            <Input
-                                id="bio"
-                                name="bio"
-                                placeholder="Enter bio"
-                                onChange={(e) => setData('bio', e.target.value)}
-                            />
-                        </div>
+                    {/* name */}
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            placeholder="Enter full name"
+                            onChange={(e) => setData('name', e.target.value)}
+                            required
+                        />
                     </div>
-
-                    <div className="flex w-full flex-col gap-3">
-                        <p className="text-sm font-medium text-gray-500">
-                            Credentials
-                        </p>
-
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="off"
-                                placeholder="Enter email address"
-                                required
-                            />
-                        </div>
-                        <div className="flex h-fit w-full flex-col gap-1.5">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="new-password"
-                                placeholder="Enter password"
-                                required
-                            />
-                        </div>
+                    {/* job title */}
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="job_title_id">Job title</Label>
+                        <Select
+                            required
+                            value={data.job_title_id}
+                            onValueChange={(value) =>
+                                setData('job_title_id', value)
+                            }
+                        >
+                            <SelectTrigger id="job_title_id">
+                                <SelectValue placeholder="Select a job title" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {jobTitles.map((job) => (
+                                    <SelectItem
+                                        key={job.id}
+                                        value={job.id.toString()}
+                                    >
+                                        {job.title}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        {errors.job_title_id && (
+                            <p className="text-sm text-red-500">
+                                {errors.job_title_id}
+                            </p>
+                        )}
                     </div>
+                    {/* specialization */}
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="specialization">Specialization</Label>
+                        <Input
+                            id="specialization"
+                            name="specialization"
+                            placeholder="Enter specialization"
+                            onChange={(e) =>
+                                setData('specialization', e.target.value)
+                            }
+                        />
+                    </div>
+                    {/* salutation */}
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="salutation">
+                            Salutation (optional)
+                        </Label>
+                        <Input
+                            id="salutation"
+                            name="salutation"
+                            placeholder="Enter salutation e.g. dr."
+                            onChange={(e) =>
+                                setData('salutation', e.target.value)
+                            }
+                        />
+                    </div>
+                    {/* bio */}
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="bio">Bio (optional)</Label>
+                        <Input
+                            id="bio"
+                            name="bio"
+                            placeholder="Enter bio"
+                            onChange={(e) => setData('bio', e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                {/* credentials */}
+                <div className="flex w-full flex-col gap-3">
+                    <p className="text-sm font-medium text-gray-500">
+                        Credentials
+                    </p>
+
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="off"
+                            placeholder="Enter email address"
+                            required
+                        />
+                    </div>
+                    <div className="flex h-fit w-full flex-col gap-1.5">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="Enter password"
+                            required
+                        />
+                    </div>
+                </div>
+
+                {/* work schedule */}
+                <div className="flex w-full flex-col gap-3">
+                    <p className="text-sm font-medium text-gray-500">
+                        Work schedule
+                    </p>
                 </div>
             </form>
         </AppLayout>
