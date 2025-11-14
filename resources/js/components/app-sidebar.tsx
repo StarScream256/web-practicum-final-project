@@ -19,10 +19,13 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     CalendarCheck,
+    CircleDollarSign,
+    ClipboardCheck,
     Contact,
     HandPlatter,
     LayoutGrid,
     User,
+    UserCog,
 } from 'lucide-react';
 import React from 'react';
 import AppLogo from './app-logo';
@@ -52,11 +55,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             href: adminStaffAvailIndex(),
             icon: CalendarCheck,
         },
-
+        {
+            title: 'Job Title',
+            href: '',
+            icon: UserCog,
+        },
         {
             title: 'Services',
             href: '',
             icon: HandPlatter,
+        },
+        {
+            title: 'Appointments',
+            href: '',
+            icon: ClipboardCheck,
+        },
+        {
+            title: 'Transactions',
+            href: '',
+            icon: CircleDollarSign,
         },
     ];
 
