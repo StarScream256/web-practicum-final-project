@@ -127,7 +127,7 @@ const columns: ColumnDef<StaffMember>[] = [
                         <View size={18} />
                     </Link>
                     <Link href={adminStaffEdit({ staff: staffMember.id }).url}>
-                        <Pencil className="text-blue-500" size={18} />
+                        <Pencil size={18} />
                     </Link>
                     <Dialog>
                         <DialogTrigger asChild>

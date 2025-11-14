@@ -29,8 +29,8 @@ class Staff extends Model
         return $this->belongsTo(JobTitle::class);
     }
 
-    public function staffAvailabilities(): HasMany
+    public function availabilities(): HasMany
     {
-        return $this->hasMany(StaffAvailability::class);
+        return $this->hasMany(StaffAvailability::class, 'staff_id', 'id');
     }
 }

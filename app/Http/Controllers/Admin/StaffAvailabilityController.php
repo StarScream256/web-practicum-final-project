@@ -15,13 +15,13 @@ class StaffAvailabilityController extends Controller
      */
     public function index()
     {
-        // $staffs = Staff::with(['user', 'jobTitle'])
-        //     ->withCount('availabilities')
-        //     ->get();
+        $staffs = Staff::with(['user', 'jobTitle'])
+            ->withCount('availabilities')
+            ->get();
 
-        // return Inertia::render('admin/staffAvailability/index', [
-        //     'staffs' => $staffs,
-        // ]);
+        return Inertia::render('admin/staffAvailability/index', [
+            'staff' => $staffs,
+        ]);
     }
 
     /**
