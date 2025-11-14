@@ -38,17 +38,7 @@
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-        @php 
-            $icons = [
-                'health_cross',
-                'health_metrics',
-                'okonomiyaki',
-                'rice_bowl'
-            ];
-            sort($icons);
-            $icons = implode(',', $icons);
-        @endphp
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names={{ $icons }}" />
+        <link href="https://fonts.bunny.net/css?family=kaushan-script:400" rel="stylesheet" />
 
         @routes
         @viteReactRefresh

@@ -13,12 +13,14 @@ import {
 import { dashboard as userDashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
+import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     CalendarCheck,
     Contact,
+    HandPlatter,
     LayoutGrid,
     User,
 } from 'lucide-react';
@@ -47,8 +49,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Staff Schedule',
-            href: '',
+            href: adminStaffAvailIndex(),
             icon: CalendarCheck,
+        },
+
+        {
+            title: 'Services',
+            href: '',
+            icon: HandPlatter,
         },
     ];
 
