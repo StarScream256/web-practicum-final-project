@@ -15,7 +15,7 @@ import {
     update as adminStaffUpdate,
 } from '@/routes/admin/staff';
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,7 +39,7 @@ interface JobTitle {
 }
 
 interface Staff {
-    id: string;
+    id: number;
     name: string;
     user: {
         email: string;
@@ -53,13 +53,13 @@ interface Staff {
     bio: string;
 }
 
-interface StaffCreatePageProps extends PageProps {
+interface StaffEditPageProps extends PageProps {
     staff: Staff;
     jobTitles: JobTitle[];
 }
 
-export default function Edit() {
-    const { staff, jobTitles } = usePage<StaffCreatePageProps>().props;
+export default function Edit(props: StaffEditPageProps) {
+    const { staff, jobTitles } = props;
 
     const { data, setData, patch, errors } = useForm({
         name: staff.name,
@@ -81,149 +81,134 @@ export default function Edit() {
             <Head title="Edit Staff" />
             <form
                 onSubmit={handleSubmit}
-                className="grid h-fit grid-cols-2 gap-10 overflow-x-auto rounded-xl p-4"
+                className="grid h-fit grid-cols-2 gap-5 overflow-x-auto rounded-xl p-4"
             >
-                <div className="flex w-full flex-col gap-5">
-                    {/* name */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                            id="name"
-                            name="name"
-                            placeholder="Enter full name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            required
-                        />
-                        {errors.name && (
-                            <p className="text-sm text-red-500">
-                                {errors.name}
-                            </p>
-                        )}
-                    </div>
-                    {/* email */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={data.email}
-                            autoComplete="off"
-                            placeholder="Enter email address"
-                            required
-                            onChange={(e) => setData('email', e.target.value)}
-                        />
-                        {errors.email && (
-                            <p className="text-sm text-red-500">
-                                {errors.email}
-                            </p>
-                        )}
-                    </div>
-                    {/* password */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="password">New password</Label>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autoComplete="new-password"
-                            placeholder="Leave blank to keep unchanged"
-                            onChange={(e) =>
-                                setData('password', e.target.value)
-                            }
-                        />
-                        {errors.password && (
-                            <p className="text-sm text-red-500">
-                                {errors.password}
-                            </p>
-                        )}
-                    </div>
-                    {/* job title */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="job_title_id">Job title</Label>
-                        <Select
-                            required
-                            value={data.job_title_id.toString()}
-                            onValueChange={(value) =>
-                                setData('job_title_id', value)
-                            }
-                        >
-                            <SelectTrigger id="job_title_id">
-                                <SelectValue placeholder="Select a job title" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {jobTitles.map((job) => (
-                                    <SelectItem
-                                        key={job.id}
-                                        value={job.id.toString()}
-                                    >
-                                        {job.title}{' '}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.job_title_id && (
-                            <p className="text-sm text-red-500">
-                                {errors.job_title_id}
-                            </p>
-                        )}
-                    </div>
+                {/* name */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                        id="name"
+                        name="name"
+                        placeholder="Enter full name"
+                        value={data.name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        required
+                    />
+                    {errors.name && (
+                        <p className="text-sm text-red-500">{errors.name}</p>
+                    )}
                 </div>
-
-                <div className="flex w-full flex-col gap-5">
-                    {/* specialization */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="specialization">Specialization</Label>
-                        <Input
-                            id="specialization"
-                            name="specialization"
-                            placeholder="Enter specialization"
-                            value={data.specialization}
-                            onChange={(e) =>
-                                setData('specialization', e.target.value)
-                            }
-                        />
-                        {errors.specialization && (
-                            <p className="text-sm text-red-500">
-                                {errors.specialization}
-                            </p>
-                        )}
-                    </div>
-                    {/* salutation */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="salutation">
-                            Salutation (optional)
-                        </Label>
-                        <Input
-                            id="salutation"
-                            name="salutation"
-                            placeholder="Enter salutation e.g. dr."
-                            value={data.salutation}
-                            onChange={(e) =>
-                                setData('salutation', e.target.value)
-                            }
-                        />
-                        {errors.salutation && (
-                            <p className="text-sm text-red-500">
-                                {errors.salutation}
-                            </p>
-                        )}
-                    </div>
-                    {/* bio */}
-                    <div className="flex h-fit w-full flex-col gap-1.5">
-                        <Label htmlFor="bio">Bio (optional)</Label>
-                        <Input
-                            id="bio"
-                            name="bio"
-                            placeholder="Enter bio"
-                            value={data.bio ?? ''}
-                            onChange={(e) => setData('bio', e.target.value)}
-                        />
-                        {errors.bio && (
-                            <p className="text-sm text-red-500">{errors.bio}</p>
-                        )}
-                    </div>
+                {/* email */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={data.email}
+                        autoComplete="off"
+                        placeholder="Enter email address"
+                        required
+                        onChange={(e) => setData('email', e.target.value)}
+                    />
+                    {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                    )}
+                </div>
+                {/* job title */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="job_title_id">Job title</Label>
+                    <Select
+                        required
+                        value={data.job_title_id.toString()}
+                        onValueChange={(value) =>
+                            setData('job_title_id', value)
+                        }
+                    >
+                        <SelectTrigger id="job_title_id">
+                            <SelectValue placeholder="Select a job title" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {jobTitles.map((job) => (
+                                <SelectItem
+                                    key={job.id}
+                                    value={job.id.toString()}
+                                >
+                                    {job.title}{' '}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {errors.job_title_id && (
+                        <p className="text-sm text-red-500">
+                            {errors.job_title_id}
+                        </p>
+                    )}
+                </div>
+                {/* specialization */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="specialization">Specialization</Label>
+                    <Input
+                        id="specialization"
+                        name="specialization"
+                        placeholder="Enter specialization"
+                        value={data.specialization}
+                        onChange={(e) =>
+                            setData('specialization', e.target.value)
+                        }
+                    />
+                    {errors.specialization && (
+                        <p className="text-sm text-red-500">
+                            {errors.specialization}
+                        </p>
+                    )}
+                </div>
+                {/* salutation */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="salutation">Salutation (optional)</Label>
+                    <Input
+                        id="salutation"
+                        name="salutation"
+                        placeholder="Enter salutation e.g. dr."
+                        value={data.salutation}
+                        onChange={(e) => setData('salutation', e.target.value)}
+                    />
+                    {errors.salutation && (
+                        <p className="text-sm text-red-500">
+                            {errors.salutation}
+                        </p>
+                    )}
+                </div>
+                {/* bio */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="bio">Bio (optional)</Label>
+                    <Input
+                        id="bio"
+                        name="bio"
+                        placeholder="Enter bio"
+                        value={data.bio ?? ''}
+                        onChange={(e) => setData('bio', e.target.value)}
+                    />
+                    {errors.bio && (
+                        <p className="text-sm text-red-500">{errors.bio}</p>
+                    )}
+                </div>
+                {/* password */}
+                <div className="flex h-fit w-full flex-col gap-1.5">
+                    <Label htmlFor="password">New password</Label>
+                    <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="Leave blank to keep unchanged"
+                        onChange={(e) => setData('password', e.target.value)}
+                    />
+                    {errors.password && (
+                        <p className="text-sm text-red-500">
+                            {errors.password}
+                        </p>
+                    )}
                 </div>
 
                 <div className="col-span-2 flex w-full justify-center gap-5">

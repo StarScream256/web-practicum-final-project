@@ -77,10 +77,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('staff-availability')
                 ->name('staff-availability.')
                 ->group(function () {
-                    Route::get('{staffId}/show', [
+                    Route::get('', [
+                        AdminStaffAvailabilityController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('{staff}/show', [
                         AdminStaffAvailabilityController::class,
                         'show',
                     ])->name('show');
+                    Route::post('store', [
+                        AdminStaffAvailabilityController::class,
+                        'store',
+                    ])->name('store');
+                    Route::patch('{availability}/update', [
+                        AdminStaffAvailabilityController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{availability}/destroy', [
+                        AdminStaffAvailabilityController::class,
+                        'destroy',
+                    ])->name('destroy');
                 });
         });
 });

@@ -27,7 +27,7 @@ import {
 } from '@/routes/admin/staff';
 import { show as adminStaffAvailShow } from '@/routes/admin/staff-availability';
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     ColumnDef,
     flexRender,
@@ -163,7 +163,7 @@ const columns: ColumnDef<StaffMember>[] = [
                     </Dialog>
                     <Link
                         href={
-                            adminStaffAvailShow({ staffId: staffMember.id }).url
+                            adminStaffAvailShow({ staff: staffMember.id }).url
                         }
                     >
                         <CalendarCheck size={18} />
@@ -174,8 +174,8 @@ const columns: ColumnDef<StaffMember>[] = [
     },
 ];
 
-export default function Index() {
-    const { auth, staff } = usePage<StaffPageProps>().props;
+export default function Index(props: StaffPageProps) {
+    const { auth, staff } = props;
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');

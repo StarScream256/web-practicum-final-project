@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StaffAvailability extends Model
 {
-    protected $fillable = ['staff_id', 'day_of_week', 'start_time', 'end_time'];
+    protected $fillable = [
+        'staff_id',
+        'day_of_week',
+        'start_time',
+        'end_time',
+        'note',
+    ];
 
     public function staff(): BelongsTo
     {
