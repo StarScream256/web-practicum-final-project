@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard as userDashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminServiceIndex } from '@/routes/admin/service';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
 import { PageProps, type NavItem } from '@/types';
@@ -62,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Services',
-            href: '',
+            href: adminServiceIndex(),
             icon: HandPlatter,
         },
         {

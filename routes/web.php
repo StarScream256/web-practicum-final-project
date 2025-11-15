@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\StaffAvailabilityController as AdminStaffAvailabilityController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -95,6 +96,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ])->name('update');
                     Route::delete('{availability}/destroy', [
                         AdminStaffAvailabilityController::class,
+                        'destroy',
+                    ])->name('destroy');
+                });
+
+            Route::prefix('service')
+                ->name('service.')
+                ->group(function () {
+                    Route::get('', [
+                        AdminServiceController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('{service}/show', [
+                        AdminServiceController::class,
+                        'show',
+                    ])->name('show');
+                    Route::post('store', [
+                        AdminServiceController::class,
+                        'store',
+                    ])->name('store');
+                    Route::patch('{service}/update', [
+                        AdminServiceController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{service}/destroy', [
+                        AdminServiceController::class,
                         'destroy',
                     ])->name('destroy');
                 });
