@@ -1,4 +1,3 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -10,11 +9,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard as userDashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
 import { index as adminServiceIndex } from '@/routes/admin/service';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
+import { dashboard as patientDashboard } from '@/routes/patient';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -25,6 +24,7 @@ import {
     Contact,
     HandPlatter,
     LayoutGrid,
+    ReceiptText,
     User,
     UserCog,
 } from 'lucide-react';
@@ -81,8 +81,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const userNavItems: NavItem[] = [
         {
             title: 'Dashboard',
-            href: userDashboard(),
+            href: patientDashboard(),
             icon: LayoutGrid,
+        },
+        {
+            title: 'Appointment',
+            href: '',
+            icon: ClipboardCheck,
+        },
+        {
+            title: 'Invoices',
+            href: '',
+            icon: ReceiptText,
         },
     ];
 
@@ -106,7 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                 href={
                                     user.role === 'admin'
                                         ? adminDashboard()
-                                        : userDashboard()
+                                        : patientDashboard()
                                 }
                                 prefetch
                             >
@@ -122,7 +132,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

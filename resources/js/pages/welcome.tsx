@@ -1,5 +1,6 @@
-import { login, register, dashboard as userDashboard } from '@/routes';
+import { login, register } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
+import { dashboard as patientDashboard } from '@/routes/patient';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 
@@ -27,7 +28,7 @@ export default function Welcome({
                                 href={
                                     auth.user.role === 'admin'
                                         ? adminDashboard()
-                                        : userDashboard()
+                                        : patientDashboard()
                                 }
                                 className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             >

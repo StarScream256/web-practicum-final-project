@@ -11,10 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id('transaction_id');
-            $table
-                ->foreignId('invoice_id')
-                ->constrained('invoices', 'invoice_id');
+            $table->id();
+            $table->foreignId('invoice_id')->constrained('invoices', 'id');
             $table->decimal('amount_paid', 10, 2);
             $table->enum('payment_method', [
                 'cash',

@@ -11,11 +11,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
-            $table->id('appointment_id');
+            $table->id();
 
             $table->foreignId('patient_id')->constrained('patients', 'id');
             $table->foreignId('staff_id')->constrained('staffs', 'id');
-            $table->foreignId('service_id')->constrained('services', 'id');
 
             $table->dateTime('appointment_start_time');
             $table->dateTime('appointment_end_time');

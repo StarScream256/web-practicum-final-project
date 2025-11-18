@@ -108,7 +108,7 @@ export default function CreateServiceModal({
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="cost">Cost</Label>
-                        <DialogDescription>
+                        <DialogDescription className="text-xs">
                             Accept 2 point decimal e.g. 16000,75
                         </DialogDescription>
                         <Input

@@ -66,7 +66,7 @@ interface Staff {
     specialization: string;
 }
 
-interface Availability {
+export interface Availability {
     id: number;
     staff_id: number;
     day_of_week:
@@ -184,17 +184,17 @@ export default function Show(props: StaffAvailShowPageProps) {
                     Staff information
                 </p>
                 {/* name */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input id="name" value={staff.name} readOnly />
                 </div>
                 {/* email */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="email">Email</Label>
                     <Input id="email" value={staff.user.email} readOnly />
                 </div>
                 {/* job title */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="jobTitle">Job title</Label>
                     <Input
                         id="jobTitle"
@@ -203,7 +203,7 @@ export default function Show(props: StaffAvailShowPageProps) {
                     />
                 </div>
                 {/* specialization */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="specialization">Specialization</Label>
                     <Input
                         id="specialization"

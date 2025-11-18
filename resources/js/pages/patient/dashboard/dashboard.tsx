@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
-import { create as userAppointmentCreate } from '@/routes/user/appointment';
+import { dashboard } from '@/routes/patient';
+import { create as userAppointmentCreate } from '@/routes/patient/appointment';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ClipboardPlus, Search } from 'lucide-react';

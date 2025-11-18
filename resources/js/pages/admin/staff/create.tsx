@@ -73,7 +73,7 @@ export default function Create(props: StaffCreatePageProps) {
                 <p className="text-sm font-medium text-gray-500">Credentials</p>
 
                 {/* name */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input
                         id="name"
@@ -87,7 +87,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* email */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="email">Email</Label>
                     <Input
                         id="email"
@@ -103,7 +103,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* job title */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="job_title_id">Job title</Label>
                     <Select
                         required
@@ -133,7 +133,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* specialization */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="specialization">Specialization</Label>
                     <Input
                         id="specialization"
@@ -150,7 +150,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* salutation */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="salutation">Salutation (optional)</Label>
                     <Input
                         id="salutation"
@@ -165,7 +165,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* bio */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="bio">Bio (optional)</Label>
                     <Input
                         id="bio"
@@ -178,7 +178,7 @@ export default function Create(props: StaffCreatePageProps) {
                     )}
                 </div>
                 {/* password */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="password">Password</Label>
                     <Input
                         id="password"

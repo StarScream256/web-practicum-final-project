@@ -16,3 +16,21 @@ export function isSameUrl(
 export function resolveUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+export const generateTimeSlots = (
+    start: string,
+    end: string,
+    step: number = 30,
+): string[] => {
+    const [sh, sm] = start.split(':').map(Number);
+    const [eh, em] = end.split(':').map(Number);
+    const slots: string[] = [];
+
+    for (let m = sh * 60 + sm; m <= eh * 60 + em; m += step) {
+        slots.push(
+            `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`,
+        );
+    }
+
+    return slots;
+};

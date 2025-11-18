@@ -11,7 +11,6 @@ class Appointment extends Model
     protected $fillable = [
         'patient_id',
         'staff_id',
-        'service_id',
         'appointment_start_time',
         'appointment_end_time',
         'check_in_time',
@@ -31,9 +30,21 @@ class Appointment extends Model
         return $this->belongsTo(Staff::class);
     }
 
-    public function service(): BelongsTo
+    public function appointmentServices()
     {
-        return $this->belongsTo(Service::class);
+        return $this->hasMany(AppointmentService::class);
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'appointment_services')
+            ->withPivot('price', 'quantity', 'added_by', 'notes')
+            ->withTimestamps();
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->appointmentServices->sum('subtotal');
     }
 
     public function invoices(): HasMany

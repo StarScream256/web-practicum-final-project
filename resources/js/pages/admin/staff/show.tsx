@@ -78,17 +78,17 @@ export default function Edit(props: StaffShowPageProps) {
             <Head title="Show Staff" />
             <div className="grid h-fit grid-cols-2 gap-5 overflow-x-auto rounded-xl p-4">
                 {/* name */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input id="name" value={staff.name} readOnly />
                 </div>
                 {/* email */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="email">Email</Label>
                     <Input id="email" value={staff.user.email} readOnly />
                 </div>
                 {/* job title */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="job_title">Job title</Label>
                     <Input
                         id="job_title"
@@ -97,7 +97,7 @@ export default function Edit(props: StaffShowPageProps) {
                     />
                 </div>
                 {/* specialization */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="specialization">Specialization</Label>
                     <Input
                         id="specialization"
@@ -106,12 +106,12 @@ export default function Edit(props: StaffShowPageProps) {
                     />
                 </div>
                 {/* salutation */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="salutation">Salutation</Label>
                     <Input id="salutation" value={staff.salutation} readOnly />
                 </div>
                 {/* bio */}
-                <div className="flex h-fit w-full flex-col gap-1.5">
+                <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="bio">Bio</Label>
                     <Input id="bio" value={staff.bio ?? ''} readOnly />
                 </div>

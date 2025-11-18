@@ -15,22 +15,24 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // --- User Routes ---
-    Route::group([], function () {
-        // URL: /dashboard
-        Route::get('dashboard', function () {
-            return Inertia::render('user/dashboard/dashboard');
-        })->name('dashboard');
+    // --- Patient Routes ---
+    Route::prefix('patient')
+        ->name('patient.')
+        ->group(function () {
+            // URL: /patient/dashboard
+            Route::get('dashboard', function () {
+                return Inertia::render('patient/dashboard/dashboard');
+            })->name('dashboard');
 
-        // URL: /appointment/create
-        Route::prefix('appointment')
-            ->name('user.appointment.')
-            ->group(function () {
-                Route::get('create', function () {
-                    return Inertia::render('user/appointment/create');
-                })->name('create');
-            });
-    });
+            // URL: /patient/appointment/...
+            Route::prefix('appointment')
+                ->name('appointment.')
+                ->group(function () {
+                    Route::get('create', function () {
+                        return Inertia::render('patient/appointment/create');
+                    })->name('create');
+                });
+        });
 
     // --- Admin Routes ---
     Route::prefix('admin/dashboard')
