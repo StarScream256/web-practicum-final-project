@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\StaffAvailabilityController as AdminStaffAvailabilityController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Patient\AppointmentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -28,9 +29,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('appointment')
                 ->name('appointment.')
                 ->group(function () {
-                    Route::get('create', function () {
-                        return Inertia::render('patient/appointment/create');
-                    })->name('create');
+                    Route::get('', [
+                        AppointmentController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('create', [
+                        AppointmentController::class,
+                        'create',
+                    ])->name('create');
+                    Route::post('store', [
+                        AppointmentController::class,
+                        'store',
+                    ])->name('store');
                 });
         });
 

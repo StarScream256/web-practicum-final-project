@@ -34,15 +34,22 @@ function isValidDate(date: Date | undefined) {
 
 interface InputCalendarProps {
     label?: string;
+    onChange: (date: Date) => void;
 }
 
-export function InputCalendar({ label = 'Input date' }: InputCalendarProps) {
+export function InputCalendar({
+    label = 'Input date',
+    onChange,
+}: InputCalendarProps) {
     const [open, setOpen] = React.useState(false);
-    const [date, setDate] = React.useState<Date | undefined>(
-        new Date('2025-06-01'),
-    );
+    const [date, setDate] = React.useState<Date | undefined>(new Date());
     const [month, setMonth] = React.useState<Date | undefined>(date);
     const [value, setValue] = React.useState(formatDate(date));
+    React.useEffect(() => {
+        if (date) {
+            onChange(date);
+        }
+    }, [date]);
 
     return (
         <div className="flex flex-col gap-3">
@@ -51,7 +58,7 @@ export function InputCalendar({ label = 'Input date' }: InputCalendarProps) {
                 <Input
                     id="date"
                     value={value}
-                    placeholder="June 01, 2025"
+                    placeholder="Select date"
                     className="bg-background pr-10"
                     onChange={(e) => {
                         const date = new Date(e.target.value);
