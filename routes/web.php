@@ -41,6 +41,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AppointmentController::class,
                         'store',
                     ])->name('store');
+                    Route::get('{id}/show', [
+                        AppointmentController::class,
+                        'show',
+                    ])->name('show');
                 });
         });
 

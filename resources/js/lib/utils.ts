@@ -1,3 +1,4 @@
+import { Appointment } from '@/pages/patient/appointment';
 import { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
 import { addMinutes, format, parse, parseISO } from 'date-fns';
@@ -16,13 +17,6 @@ export function isSameUrl(
 
 export function resolveUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
-}
-
-export interface Appointment {
-    id: number;
-    staff_id: number;
-    appointment_start_time: string; // "2025-11-21 09:00:00"
-    appointment_end_time: string; // "2025-11-21 10:00:00"
 }
 
 export interface TimeSlot {
@@ -64,4 +58,21 @@ export function generateAvailableSlots(
     }
 
     return slots;
+}
+
+export function toHumanReadableDateTime(dateTime: string) {
+    const date = new Date(dateTime);
+    const humanReadableDate = date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
+    const humanReadableTime = date.toLocaleTimeString(undefined, {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+    });
+
+    return `${humanReadableDate} at ${humanReadableTime}`;
 }

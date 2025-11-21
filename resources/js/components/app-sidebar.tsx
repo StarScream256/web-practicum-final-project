@@ -14,6 +14,7 @@ import { index as adminServiceIndex } from '@/routes/admin/service';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
 import { dashboard as patientDashboard } from '@/routes/patient';
+import { index as patientAppointmentIndex } from '@/routes/patient/appointment';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -86,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Appointment',
-            href: '',
+            href: patientAppointmentIndex(),
             icon: ClipboardCheck,
         },
         {
