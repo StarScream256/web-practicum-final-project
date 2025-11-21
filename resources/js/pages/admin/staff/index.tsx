@@ -62,7 +62,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface StaffMember {
+export interface Staff {
     id: number;
     user_id: number;
     name: string;
@@ -80,10 +80,10 @@ interface StaffMember {
 }
 
 interface StaffPageProps extends PageProps {
-    staff: StaffMember[];
+    staff: Staff[];
 }
 
-const columns: ColumnDef<StaffMember>[] = [
+const columns: ColumnDef<Staff>[] = [
     {
         id: 'rowNumber',
         header: 'No',

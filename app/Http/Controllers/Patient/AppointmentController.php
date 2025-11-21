@@ -20,7 +20,13 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('patient/appointment/index');
+        $patient = Patient::where('user_id', Auth::id())->first();
+        return Inertia::render('patient/appointment/index', [
+            'appointments' => Appointment::with(['staff.jobTitle'])
+                ->where('patient_id', $patient->id)
+                ->orderByDesc('created_at')
+                ->get(),
+        ]);
     }
 
     /**
@@ -120,7 +126,11 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Inertia::render('patient/appointment/show', [
+            'appointment' => Appointment::with(['staff.jobTitle'])
+                ->where('id', $id)
+                ->first(),
+        ]);
     }
 
     /**

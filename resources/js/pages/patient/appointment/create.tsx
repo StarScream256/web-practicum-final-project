@@ -9,18 +9,20 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import { Appointment, cn, generateAvailableSlots } from '@/lib/utils';
+import { cn, generateAvailableSlots } from '@/lib/utils';
 import { Service } from '@/pages/admin/services';
 import { Availability } from '@/pages/admin/staffAvailability/show';
 import { dashboard as userDashboard } from '@/routes/patient';
 import {
     create as appointmentCreate,
+    index as appointmentIndex,
     store as appointmentStore,
 } from '@/routes/patient/appointment';
 import { BreadcrumbItem, PageProps } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { addMinutes, format, parse } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
+import { Appointment } from '.';
 import { InputCalendar } from './components/input-calendar';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -30,7 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Appointment',
-        href: '',
+        href: appointmentIndex().url,
     },
     {
         title: 'Create Appointment',
@@ -73,7 +75,6 @@ export default function CreateAppointment({
         notes: '',
     });
 
-    console.log(appointments);
     const dayNames = [
         'sunday',
         'monday',

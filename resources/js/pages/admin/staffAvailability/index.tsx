@@ -30,6 +30,7 @@ import {
     Search,
 } from 'lucide-react';
 import { useState } from 'react';
+import { Staff } from '../staff';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -42,28 +43,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface StaffMember {
-    id: number;
-    user_id: number;
-    name: string;
-    job_title_id: number;
-    specialization: string;
-    salutation: string;
-    bio: string;
-    picture: string;
-    user: {
-        email: string;
-    };
-    job_title: {
-        title: string;
-    };
-}
-
 interface StaffPageProps extends PageProps {
-    staff: StaffMember[];
+    staff: Staff[];
 }
 
-const columns: ColumnDef<StaffMember>[] = [
+const columns: ColumnDef<Staff>[] = [
     {
         id: 'rowNumber',
         header: 'No',
