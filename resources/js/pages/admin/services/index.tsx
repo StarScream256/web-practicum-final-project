@@ -8,6 +8,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
+import { toCurrency } from '@/lib/utils';
 import { dashboard } from '@/routes/admin';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -51,6 +52,17 @@ export interface Service {
     description: string;
     duration_minutes: number;
     cost: number;
+
+    pivot?: {
+        appointment_id: number;
+        service_id: number;
+        price: string;
+        quantity: number;
+        added_by: string;
+        notes: string | null;
+        created_at: string;
+        updated_at: string;
+    };
 }
 
 interface ServicePageProps extends PageProps {
@@ -93,12 +105,7 @@ export default function Index(props: ServicePageProps) {
         {
             accessorKey: 'cost',
             header: 'Cost',
-            cell: ({ row }) => {
-                return new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                }).format(row.original.cost);
-            },
+            cell: ({ row }) => toCurrency(row.original.cost),
         },
         {
             id: 'actions',

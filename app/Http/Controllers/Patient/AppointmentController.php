@@ -24,7 +24,6 @@ class AppointmentController extends Controller
         return Inertia::render('patient/appointment/index', [
             'appointments' => Appointment::with(['staff.jobTitle'])
                 ->where('patient_id', $patient->id)
-                ->orderByDesc('created_at')
                 ->get(),
         ]);
     }
@@ -126,8 +125,13 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
+        // dd(
+        //     Appointment::with(['staff.jobTitle', 'services.service'])
+        //         ->where('id', $id)
+        //         ->first(),
+        // );
         return Inertia::render('patient/appointment/show', [
-            'appointment' => Appointment::with(['staff.jobTitle'])
+            'appointment' => Appointment::with(['staff.jobTitle', 'services'])
                 ->where('id', $id)
                 ->first(),
         ]);
@@ -154,6 +158,10 @@ class AppointmentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Appointment::where('id', $id)->delete();
+        return to_route('patient.appointment.index')->with(
+            'success',
+            'Appointment has been deleted',
+        );
     }
 }
