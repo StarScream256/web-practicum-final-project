@@ -1,7 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Item,
+    ItemContent,
+    ItemDescription,
+    ItemTitle,
+} from '@/components/ui/item';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
+import { toCurrency, toHumanReadableDateTime } from '@/lib/utils';
 import { dashboard as userDashboard } from '@/routes/patient';
 import { index as appointmentIndex } from '@/routes/patient/appointment';
 import { BreadcrumbItem, PageProps } from '@/types';
@@ -32,6 +39,7 @@ export default function CreateAppointment({
     auth,
     appointment,
 }: CreateAppointmentProps) {
+    console.log(appointment);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Show Appointment" />
@@ -40,12 +48,19 @@ export default function CreateAppointment({
                     <Label htmlFor="">Appointment time</Label>
                     <Input
                         readOnly
-                        value={appointment.appointment_start_time}
+                        value={toHumanReadableDateTime(
+                            appointment.appointment_start_time,
+                        )}
                     />
                 </div>
                 <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="">Appointment end time (estimated)</Label>
-                    <Input readOnly value={appointment.appointment_end_time} />
+                    <Input
+                        readOnly
+                        value={toHumanReadableDateTime(
+                            appointment.appointment_end_time,
+                        )}
+                    />
                 </div>
                 <div className="flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="">Doctor</Label>
@@ -101,6 +116,36 @@ export default function CreateAppointment({
                         type="text"
                         value={appointment.notes ?? '-'}
                     />
+                </div>
+                <div className="col-span-2 flex h-fit w-full flex-col gap-3">
+                    <Label htmlFor="">Services</Label>
+                    <div className="grid h-fit w-full grid-cols-2 gap-5">
+                        {appointment.services ? (
+                            appointment.services.map((serviceItem, id) => (
+                                <Item variant={'outline'}>
+                                    <ItemContent>
+                                        <ItemTitle>
+                                            {serviceItem.name},{' '}
+                                            <p className="font-normal">
+                                                added by{' '}
+                                                {serviceItem.pivot?.added_by}
+                                            </p>
+                                        </ItemTitle>
+                                        <ItemDescription>
+                                            {toCurrency(serviceItem.cost)},
+                                            duration{' '}
+                                            {serviceItem.duration_minutes}{' '}
+                                            minutes,{' '}
+                                            {serviceItem.description ??
+                                                'No description'}
+                                        </ItemDescription>
+                                    </ItemContent>
+                                </Item>
+                            ))
+                        ) : (
+                            <></>
+                        )}
+                    </div>
                 </div>
 
                 <div className="col-span-2 flex justify-center gap-5">

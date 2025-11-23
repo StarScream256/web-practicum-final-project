@@ -171,7 +171,6 @@ export default function CreateAppointment({
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        console.log(data);
         post(appointmentStore().url);
     }
 
@@ -192,13 +191,16 @@ export default function CreateAppointment({
                     <Label htmlFor="doctor">Doctor</Label>
                     {availableDoctors && (
                         <Select
+                            disabled={availableDoctors.length <= 0}
                             required
                             onValueChange={(value) =>
                                 setData('staff_id', Number(value))
                             }
                         >
                             <SelectTrigger id="doctor">
-                                <SelectValue placeholder="Select available doctor" />
+                                <SelectValue
+                                    placeholder={`${availableDoctors.length > 0 ? 'Select available doctor' : 'No available doctor'}`}
+                                />
                             </SelectTrigger>
                             <SelectContent>
                                 {availableDoctors.map((doc) => (
@@ -268,6 +270,16 @@ export default function CreateAppointment({
                             )}
                         </div>
                     )}
+                    {errors.appointment_start_time && (
+                        <p className="text-sm text-red-500">
+                            {errors.appointment_start_time}
+                        </p>
+                    )}
+                    {errors.appointment_end_time && (
+                        <p className="text-sm text-red-500">
+                            {errors.appointment_end_time}
+                        </p>
+                    )}
                 </div>
                 <div className="col-span-2 flex h-fit w-full flex-col gap-3">
                     <Label>Services (optional)</Label>
@@ -311,7 +323,6 @@ export default function CreateAppointment({
                         </p>
                     )}
                 </div>
-
                 <div className="col-span-2 flex h-fit w-full flex-col gap-3">
                     <Label htmlFor="">Notes (optional)</Label>
                     <Input
@@ -319,8 +330,10 @@ export default function CreateAppointment({
                         placeholder="Enter notes here"
                         onChange={(e) => setData('notes', e.target.value)}
                     />
+                    {errors.notes && (
+                        <p className="text-sm text-red-500">{errors.notes}</p>
+                    )}
                 </div>
-
                 <div className="col-span-2 flex justify-center gap-5">
                     <Button type="submit">Book Appointment</Button>
                 </div>

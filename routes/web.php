@@ -4,7 +4,8 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\StaffAvailabilityController as AdminStaffAvailabilityController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
-use App\Http\Controllers\Patient\AppointmentController;
+use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
+use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -21,30 +22,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('patient.')
         ->group(function () {
             // URL: /patient/dashboard
-            Route::get('dashboard', function () {
-                return Inertia::render('patient/dashboard/dashboard');
-            })->name('dashboard');
+            Route::get('dashboard', [
+                PatientDashboardController::class,
+                'index',
+            ])->name('dashboard');
 
             // URL: /patient/appointment/...
             Route::prefix('appointment')
                 ->name('appointment.')
                 ->group(function () {
                     Route::get('', [
-                        AppointmentController::class,
+                        PatientAppointmentController::class,
                         'index',
                     ])->name('index');
                     Route::get('create', [
-                        AppointmentController::class,
+                        PatientAppointmentController::class,
                         'create',
                     ])->name('create');
                     Route::post('store', [
-                        AppointmentController::class,
+                        PatientAppointmentController::class,
                         'store',
                     ])->name('store');
                     Route::get('{id}/show', [
-                        AppointmentController::class,
+                        PatientAppointmentController::class,
                         'show',
                     ])->name('show');
+                    Route::delete('{id}/destroy', [
+                        PatientAppointmentController::class,
+                        'destroy',
+                    ])->name('destroy');
                 });
         });
 
