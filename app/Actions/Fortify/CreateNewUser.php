@@ -39,6 +39,15 @@ class CreateNewUser implements CreatesNewUsers
 
         return DB::transaction(function () use ($input) {
             $role = Role::where('name', 'user')->first();
+            
+            if (!$role) {
+                // Create the role if it doesn't exist
+                $role = Role::create([
+                    'name' => 'user',
+                    'description' => 'Regular user role',
+                ]);
+            }
+            
             $user = User::create([
                 'email' => $input['email'],
                 'password' => $input['password'],

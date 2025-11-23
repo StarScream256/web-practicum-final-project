@@ -99,7 +99,7 @@ export default function Register() {
                                         </Label>
                                     </span>
                                     <InputError
-                                        message={errors.phone}
+                                        message={errors.gender}
                                         className="mt-2"
                                     />
                                 </div>
@@ -115,7 +115,7 @@ export default function Register() {
                                         placeholder="Address"
                                     />
                                     <InputError
-                                        message={errors.dob}
+                                        message={errors.address}
                                         className="mt-2"
                                     />
                                 </div>
@@ -132,7 +132,7 @@ export default function Register() {
                                         autoComplete="dob"
                                         name="dob"
                                     />
-                                    <InputError message={errors.email} />
+                                    <InputError message={errors.dob} />
                                 </div>
 
                                 <div className="grid gap-2">
