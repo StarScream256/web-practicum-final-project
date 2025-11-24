@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PatientController as AdminPatientController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\StaffAvailabilityController as AdminStaffAvailabilityController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -53,9 +54,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('admin.')
         ->group(function () {
             // URL: /admin/dashboard
-            Route::get('', function () {
-                return Inertia::render('admin/dashboard/dashboard');
-            })->name('dashboard');
+            Route::get('', [
+                AdminDashboardController::class,
+                'index',
+            ])->name('dashboard');
+
+            // URL: /admin/dashboard/patients/...
+            Route::prefix('patients')
+                ->name('patients.')
+                ->group(function () {
+                    Route::get('', [
+                        AdminPatientController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('{patients}/show', [
+                        AdminPatientController::class,
+                        'show',
+                    ])->name('show');
+                    Route::get('{patients}/edit', [
+                        AdminPatientController::class,
+                        'edit',
+                    ])->name('edit');
+                    Route::patch('{patients}/update', [
+                        AdminPatientController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{patients}', [
+                        AdminPatientController::class,
+                        'destroy',
+                    ])->name('destroy');
+                });
 
             // URL: /admin/dashboard/staff/...
             Route::prefix('staff')

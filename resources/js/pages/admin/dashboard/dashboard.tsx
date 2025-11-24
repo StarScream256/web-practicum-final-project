@@ -1,10 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
+import { Staff } from '@/pages/admin/staff';
 import { dashboard } from '@/routes/admin';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { Search } from 'lucide-react';
+import { PageProps, type BreadcrumbItem } from '@/types';
+import { Head} from '@inertiajs/react';
+import AppointmentsList from './components/appointmentsList';
+import DoctorList from './components/doctorList';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,7 +14,37 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard() {
+interface Patient {
+    id: number;
+    name: string;
+}
+
+interface Appointment {
+    id: number;
+    patient: Patient;
+    staff: Staff;
+    appointment_start_time: string;
+    appointment_end_time: string;
+    status: 'scheduled' | 'checked-in' | 'completed' | 'canceled';
+}
+
+interface AdminDashboardProps extends PageProps {
+    appointmentsToday: number;
+    appointmentsThisMonth: number;
+    totalPatients: number;
+    totalStaff: number;
+    doctors: Staff[];
+    appointments: Appointment[];
+}
+
+export default function Dashboard({
+    appointmentsToday,
+    appointmentsThisMonth,
+    totalPatients,
+    totalStaff,
+    appointments,
+    doctors,
+}: AdminDashboardProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -26,7 +57,11 @@ export default function Dashboard() {
                                 Appointments today
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>as</CardContent>
+                        <CardContent>
+                            <p className="text-2xl font-bold">
+                                {appointmentsToday}
+                            </p>
+                        </CardContent>
                     </Card>
                     <Card>
                         <CardHeader>
@@ -34,7 +69,11 @@ export default function Dashboard() {
                                 Appointments this month
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>as</CardContent>
+                        <CardContent>
+                            <p className="text-2xl font-bold">
+                                {appointmentsThisMonth}
+                            </p>
+                        </CardContent>
                     </Card>
                     <Card>
                         <CardHeader>
@@ -42,7 +81,11 @@ export default function Dashboard() {
                                 Total patients
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>as</CardContent>
+                        <CardContent>
+                            <p className="text-2xl font-bold">
+                                {totalPatients}
+                            </p>
+                        </CardContent>
                     </Card>
                     <Card>
                         <CardHeader>
@@ -50,22 +93,19 @@ export default function Dashboard() {
                                 Total staff
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>as</CardContent>
+                        <CardContent>
+                            <p className="text-2xl font-bold">{totalStaff}</p>
+                        </CardContent>
                     </Card>
                 </div>
+                <AppointmentsList
+                    appointments={appointments}
+                />
 
-                {/* search bar */}
-                <div className="flex h-fit w-full gap-5">
-                    <div className="relative h-fit w-full">
-                        <Input
-                            placeholder="Search staff"
-                            value={''}
-                            onChange={(e) => {}}
-                            className="pl-10"
-                        />
-                        <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
-                    </div>
-                </div>
+                {/* Doctors Section */}
+                <DoctorList 
+                    doctors={doctors} 
+                />
             </div>
         </AppLayout>
     );
