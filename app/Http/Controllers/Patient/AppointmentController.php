@@ -125,11 +125,6 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-        // dd(
-        //     Appointment::with(['staff.jobTitle', 'services.service'])
-        //         ->where('id', $id)
-        //         ->first(),
-        // );
         return Inertia::render('patient/appointment/show', [
             'appointment' => Appointment::with(['staff.jobTitle', 'services'])
                 ->where('id', $id)
@@ -159,9 +154,6 @@ class AppointmentController extends Controller
     public function destroy(string $id)
     {
         Appointment::where('id', $id)->delete();
-        return to_route('patient.appointment.index')->with(
-            'success',
-            'Appointment has been deleted',
-        );
+        return back()->with('success', 'Appointment has been deleted');
     }
 }

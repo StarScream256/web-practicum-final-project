@@ -4,13 +4,10 @@ import { toHumanReadableDateTime } from '@/lib/utils';
 import { dashboard } from '@/routes/patient';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import {
-    CalendarClock,
-    ClipboardCheck,
-    MessageSquareQuote,
-    Timer,
-} from 'lucide-react';
+import { CalendarClock, ClipboardCheck, Timer } from 'lucide-react';
 import { Appointment } from '../appointment';
+import RecentAppointments from './components/recentAppointments';
+import RecentInvoices, { Invoice } from './components/recentInvoices';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,6 +20,8 @@ interface DashboardPageProps extends PageProps {
     nextAppointment: Appointment | null;
     scheduledAppointment: number;
     completedAppointment: number;
+    recentAppointments: Appointment[];
+    recentInvoices: Invoice[];
     quote: {
         author: string;
         message: string;
@@ -33,7 +32,11 @@ export default function Dashboard({
     nextAppointment,
     scheduledAppointment,
     completedAppointment,
+    recentAppointments,
+    recentInvoices,
     quote,
+    auth,
+    flash,
 }: DashboardPageProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -90,11 +93,14 @@ export default function Dashboard({
                             </p>
                         </CardContent>
                     </Card>
-                    <span className="col-span-3 flex w-full gap-3 rounded-lg border border-primary bg-blue-500/20 px-4 py-3">
+                    {/* <Card className="col-span-3 flex-row gap-3 bg-blue-500/10 px-4 py-3">
                         <MessageSquareQuote />
                         {`"${quote.message}" - ${quote.author}`}
-                    </span>
+                    </Card> */}
                 </div>
+
+                <RecentAppointments recentAppointments={recentAppointments} />
+                <RecentInvoices recentInvoices={recentInvoices} />
             </div>
         </AppLayout>
     );
