@@ -283,40 +283,48 @@ export default function CreateAppointment({
                 </div>
                 <div className="col-span-2 flex h-fit w-full flex-col gap-3">
                     <Label>Services (optional)</Label>
-                    <div
-                        className={`grid w-fit ${
-                            services.length > 8
-                                ? 'grid-cols-4'
-                                : 'flex flex-col'
-                        } gap-3 pl-2`}
-                    >
-                        {services.map((service) => (
-                            <span
-                                key={service.id}
-                                className="flex h-fit w-fit items-center gap-3"
-                            >
-                                <input
-                                    type="checkbox"
-                                    id={`service-${service.id}`}
-                                    name="services[]"
-                                    className="cursor-pointer rounded border-gray-300 text-primary focus:ring-primary"
-                                    checked={data.services.includes(service.id)}
-                                    onChange={(e) =>
-                                        handleServiceChange(
-                                            service.id,
-                                            e.target.checked,
-                                        )
-                                    }
-                                />
-                                <label
-                                    htmlFor={`service-${service.id}`}
-                                    className="cursor-pointer text-sm"
+                    {services.length > 0 ? (
+                        <div
+                            className={`grid w-fit ${
+                                services.length > 8
+                                    ? 'grid-cols-4'
+                                    : 'flex flex-col'
+                            } gap-3 pl-2`}
+                        >
+                            {services.map((service) => (
+                                <span
+                                    key={service.id}
+                                    className="flex h-fit w-fit items-center gap-3"
                                 >
-                                    {service.name}
-                                </label>
-                            </span>
-                        ))}
-                    </div>
+                                    <input
+                                        type="checkbox"
+                                        id={`service-${service.id}`}
+                                        name="services[]"
+                                        className="cursor-pointer rounded border-gray-300 text-primary focus:ring-primary"
+                                        checked={data.services.includes(
+                                            service.id,
+                                        )}
+                                        onChange={(e) =>
+                                            handleServiceChange(
+                                                service.id,
+                                                e.target.checked,
+                                            )
+                                        }
+                                    />
+                                    <label
+                                        htmlFor={`service-${service.id}`}
+                                        className="cursor-pointer text-sm"
+                                    >
+                                        {service.name}
+                                    </label>
+                                </span>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="col-span-full text-sm text-muted-foreground">
+                            No available services
+                        </p>
+                    )}
                     {errors.services && (
                         <p className="text-sm text-red-500">
                             {errors.services}
