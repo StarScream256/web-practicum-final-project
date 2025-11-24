@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard as adminDashboard } from '@/routes/admin';
 import { index as adminServiceIndex } from '@/routes/admin/service';
+import { index as adminPatientsIndex } from '@/routes/admin/patients';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
 import { dashboard as patientDashboard } from '@/routes/patient';
@@ -44,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Patients',
-            href: '',
+            href: adminPatientsIndex(),
             icon: User,
         },
         {
