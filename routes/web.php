@@ -66,27 +66,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('patients')
                 ->name('patients.')
                 ->group(function () {
-                Route::get('', [
-                    AdminPatientController::class,
-                    'index',
-                ])->name('index');
-                Route::get('{patients}/show', [
-                    AdminPatientController::class,
-                    'show',
-                ])->name('show');
-                Route::get('{patients}/edit', [
-                    AdminPatientController::class,
-                    'edit',
-                ])->name('edit');
-                Route::patch('{patients}/update', [
-                    AdminPatientController::class,
-                    'update',
-                ])->name('update');
-                Route::delete('{patients}', [
-                    AdminPatientController::class,
-                    'destroy',
-                ])->name('destroy');
-            });
+                    Route::get('', [
+                        AdminPatientController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('{patients}/show', [
+                        AdminPatientController::class,
+                        'show',
+                    ])->name('show');
+                    Route::get('{patients}/edit', [
+                        AdminPatientController::class,
+                        'edit',
+                    ])->name('edit');
+                    Route::patch('{patients}/update', [
+                        AdminPatientController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{patients}', [
+                        AdminPatientController::class,
+                        'destroy',
+                    ])->name('destroy');
+                });
 
             // URL: /admin/dashboard/staff/...
             Route::prefix('staff')
