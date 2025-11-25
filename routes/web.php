@@ -24,9 +24,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('patient.')
         ->group(function () {
             // URL: /patient/dashboard
-            Route::get('dashboard', function () {
-                return Inertia::render('patient/dashboard/dashboard');
-            })->name('dashboard');
+            Route::get('dashboard', [
+                PatientDashboardController::class,
+                'index',
+            ])->name('dashboard');
 
             // URL: /patient/appointment/...
             Route::prefix('appointment')

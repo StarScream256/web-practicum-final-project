@@ -1,15 +1,27 @@
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { toHumanReadableDateTime } from '@/lib/utils';
+import { Service } from '@/pages/admin/services';
 import { Staff } from '@/pages/admin/staff';
 import { dashboard as userDashboard } from '@/routes/patient';
 import {
     create as patientAppointmentCreate,
+    destroy as patientAppointmentDestroy,
     show as patientAppointmentShow,
 } from '@/routes/patient/appointment';
 import { BreadcrumbItem, PageProps } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     ColumnDef,
     flexRender,
@@ -24,8 +36,10 @@ import {
     ArrowDown,
     ArrowUp,
     ArrowUpDown,
+    CircleOff,
     ClipboardPlus,
     Search,
+    Trash,
     View,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -40,6 +54,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '',
     },
 ];
+
 export interface Appointment {
     id: number;
     patient_id: number;
@@ -52,6 +67,9 @@ export interface Appointment {
     check_out_time: string;
     status: 'scheduled' | 'checked-in' | 'completed' | 'canceled';
     notes: string;
+    services: Service[];
+    created_at: string;
+    updated_at: string;
 }
 
 interface PatientAppointmentIndex extends PageProps {
@@ -101,6 +119,17 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
             header: 'Action',
             enableSorting: false,
             cell: ({ row }) => {
+                const appointmentData = row.original;
+                const handleDelete = () => {
+                    router.delete(
+                        patientAppointmentDestroy(appointmentData.id).url,
+                        {
+                            preserveState: true,
+                            preserveScroll: true,
+                        },
+                    );
+                };
+
                 return (
                     <span className="flex h-fit w-fit items-center gap-3">
                         <Link
@@ -112,6 +141,48 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                         >
                             <View size={18} />
                         </Link>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <button className="cursor-pointer text-red-500">
+                                    <span className="sr-only">Delete</span>
+                                    <Trash size={18} />
+                                </button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        Are you absolutely sure?
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete the appointment data
+                                        on{' '}
+                                        <strong>
+                                            {toHumanReadableDateTime(
+                                                appointmentData.appointment_start_time,
+                                            )}
+                                        </strong>{' '}
+                                        with doctor{' '}
+                                        <strong>
+                                            {appointmentData.staff.name}
+                                        </strong>
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline">
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+                                    <Button
+                                        variant="destructive"
+                                        onClick={handleDelete}
+                                    >
+                                        Yes, delete
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </span>
                 );
             },
@@ -151,8 +222,8 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                     <div className="relative h-fit w-full">
                         <Input
                             placeholder="Search appointment"
-                            value={''}
-                            onChange={(e) => {}}
+                            value={globalFilter}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
                             className="pl-10"
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
@@ -230,6 +301,13 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                         ))}
                     </tbody>
                 </table>
+
+                {appointments.length <= 0 && (
+                    <span className="flex h-fit w-full items-center justify-center gap-3 pt-3">
+                        <CircleOff size={18} />
+                        <p>No available data to display here</p>
+                    </span>
+                )}
             </div>
         </AppLayout>
     );

@@ -60,6 +60,13 @@ export function generateAvailableSlots(
     return slots;
 }
 
+export function toCurrency(amount: number) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+    }).format(amount);
+}
+
 export function toHumanReadableDateTime(dateTime: string) {
     const date = new Date(dateTime);
     const humanReadableDate = date.toLocaleDateString(undefined, {
