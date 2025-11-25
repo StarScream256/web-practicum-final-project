@@ -12,23 +12,23 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { store } from '@/routes/admin/service';
+import { store } from '@/routes/admin/job-title';
 import { useForm } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
-export interface CreateServiceModalProps {
+export interface CreateJobTitleModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onSubmitted?: () => void;
 }
 
-export default function CreateServiceModal({
+export default function CreateJobTitleModal({
     open,
     onOpenChange,
     onSubmitted,
-}: CreateServiceModalProps) {
+}: CreateJobTitleModalProps) {
     const { data, setData, errors, post, reset } = useForm({
-        name: '',
+        title: '',
         description: '',
         duration_minutes: '',
         cost: '',
@@ -49,25 +49,27 @@ export default function CreateServiceModal({
             <DialogTrigger asChild>
                 <Button>
                     <Plus />
-                    Create Service
+                    Create Job Title
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create Service</DialogTitle>
-                    <DialogDescription>Create a new service</DialogDescription>
+                    <DialogTitle>Create Job Title</DialogTitle>
+                    <DialogDescription>
+                        Create a new job title
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4">
                     <div className="grid gap-3">
-                        <Label htmlFor="name">Service name</Label>
+                        <Label htmlFor="title">Job title</Label>
                         <Input
-                            id="name"
-                            placeholder="Service name"
-                            onChange={(e) => setData('name', e.target.value)}
+                            id="title"
+                            placeholder="Job title"
+                            onChange={(e) => setData('title', e.target.value)}
                         />
-                        {errors.name && (
+                        {errors.title && (
                             <p className="text-sm text-red-500">
-                                {errors.name}
+                                {errors.title}
                             </p>
                         )}
                     </div>
@@ -77,7 +79,7 @@ export default function CreateServiceModal({
                         </Label>
                         <Textarea
                             id="description"
-                            placeholder="Service description (optional)"
+                            placeholder="Job title description (optional)"
                             onChange={(e) =>
                                 setData('description', e.target.value)
                             }
@@ -85,44 +87,6 @@ export default function CreateServiceModal({
                         {errors.description && (
                             <p className="text-sm text-red-500">
                                 {errors.description}
-                            </p>
-                        )}
-                    </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="duration_minutes">
-                            Duration (minutes)
-                        </Label>
-                        <Input
-                            id="duration_minutes"
-                            type="number"
-                            min={0}
-                            placeholder="Duration (minutes)"
-                            onChange={(e) =>
-                                setData('duration_minutes', e.target.value)
-                            }
-                        />
-                        {errors.duration_minutes && (
-                            <p className="text-sm text-red-500">
-                                {errors.duration_minutes}
-                            </p>
-                        )}
-                    </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="cost">Cost</Label>
-                        <DialogDescription className="text-xs">
-                            Accept 2 point decimal e.g. 16000,75
-                        </DialogDescription>
-                        <Input
-                            id="cost"
-                            type="number"
-                            min={0}
-                            step={0.01}
-                            placeholder="Cost e.g. 16000"
-                            onChange={(e) => setData('cost', e.target.value)}
-                        />
-                        {errors.cost && (
-                            <p className="text-sm text-red-500">
-                                {errors.cost}
                             </p>
                         )}
                     </div>
@@ -135,7 +99,7 @@ export default function CreateServiceModal({
                     </DialogClose>
                     {/* <DialogClose asChild> */}
                     <Button onClick={handleSubmit} type="submit">
-                        Add service
+                        Add job title
                     </Button>
                     {/* </DialogClose> */}
                 </DialogFooter>

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard as adminDashboard } from '@/routes/admin';
 import { index as adminAppointmentIndex } from '@/routes/admin/appointments';
+import { index as adminJobTitleIndex } from '@/routes/admin/job-title';
 import { index as adminPatientsIndex } from '@/routes/admin/patients';
 import { index as adminServiceIndex } from '@/routes/admin/service';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
@@ -63,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Job Title',
-            href: '',
+            href: adminJobTitleIndex(),
             icon: UserCog,
         },
         {

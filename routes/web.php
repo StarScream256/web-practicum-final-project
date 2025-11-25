@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TransactionsController as AdminTransactionsContro
 use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\Patient\InvoiceController as PatientInvoiceController;
+use App\Http\Controllers\Admin\JobTitleController as AdminJobTitleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -157,6 +158,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ])->name('update');
                     Route::delete('{availability}/destroy', [
                         AdminStaffAvailabilityController::class,
+                        'destroy',
+                    ])->name('destroy');
+                });
+
+            Route::prefix('job-title')
+                ->name('job-title.')
+                ->group(function () {
+                    Route::get('', [
+                        AdminJobTitleController::class,
+                        'index',
+                    ])->name('index');
+                    Route::post('store', [
+                        AdminJobTitleController::class,
+                        'store',
+                    ])->name('store');
+                    Route::patch('{jobTitle}/update', [
+                        AdminJobTitleController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{jobTitle}/destroy', [
+                        AdminJobTitleController::class,
                         'destroy',
                     ])->name('destroy');
                 });

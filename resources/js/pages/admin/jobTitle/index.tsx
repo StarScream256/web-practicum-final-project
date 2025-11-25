@@ -8,7 +8,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import { toCurrency } from '@/lib/utils';
 import { dashboard } from '@/routes/admin';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -32,10 +31,10 @@ import {
     View,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import CreateServiceModal from './components/create-service-modal';
-import DeleteServiceModal from './components/delete-service-modal';
-import EditServiceModal from './components/edit-service-modal';
-import ShowServiceModal from './components/show-service-modal';
+import CreateJobTitleModal from './components/create-job-title-modal';
+import DeleteJobTitleModal from './components/delete-job-title-modal';
+import EditJobTitleModal from './components/edit-job-title-modal';
+import ShowJobTitleModal from './components/show-job-title-modal';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,48 +42,37 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
     {
-        title: 'Services',
+        title: 'Job Title',
         href: '',
     },
 ];
 
-export interface Service {
+export interface JobTitle {
     id: number;
-    name: string;
+    title: string;
     description: string;
-    duration_minutes: number;
-    cost: number;
-
-    pivot?: {
-        appointment_id: number;
-        service_id: number;
-        price: string;
-        quantity: number;
-        added_by: string;
-        notes: string | null;
-        created_at: string;
-        updated_at: string;
-    };
+    created_at: string;
+    updated_at: string;
 }
 
-interface ServicePageProps extends PageProps {
-    services: Service[];
+interface JobTitlePageProps extends PageProps {
+    jobTitles: JobTitle[];
 }
 
-export default function Index({ auth, services }: ServicePageProps) {
+export default function Index({ auth, jobTitles }: JobTitlePageProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isShowOpen, setIsShowOpen] = useState(false);
-    const [selectedService, setSelectedService] = useState<Service>();
+    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitle>();
 
     useEffect(() => {
-        console.log(selectedService);
-    }, [selectedService]);
+        console.log(selectedJobTitle);
+    }, [selectedJobTitle]);
 
-    const columns: ColumnDef<Service>[] = [
+    const columns: ColumnDef<JobTitle>[] = [
         {
             id: 'rowNumber',
             header: 'No',
@@ -93,33 +81,21 @@ export default function Index({ auth, services }: ServicePageProps) {
             enableSorting: true,
         },
         {
-            accessorKey: 'name',
-            header: 'Name',
-        },
-        {
-            accessorKey: 'duration_minutes',
-            header: 'Duration',
-            cell: ({ row }) => {
-                return `${row.original.duration_minutes} minutes`;
-            },
-        },
-        {
-            accessorKey: 'cost',
-            header: 'Cost',
-            cell: ({ row }) => toCurrency(row.original.cost),
+            accessorKey: 'title',
+            header: 'Job Title',
         },
         {
             id: 'actions',
             header: 'Action',
             enableSorting: false,
             cell: ({ row }) => {
-                const service = row.original;
+                const jobTitle = row.original;
 
                 return (
                     <span className="flex h-fit w-fit items-center gap-3">
                         <button
                             onClick={() => {
-                                setSelectedService(service);
+                                setSelectedJobTitle(jobTitle);
                                 setIsShowOpen(true);
                             }}
                             className="p-1"
@@ -129,7 +105,7 @@ export default function Index({ auth, services }: ServicePageProps) {
                         </button>
                         <button
                             onClick={() => {
-                                setSelectedService(service);
+                                setSelectedJobTitle(jobTitle);
                                 setIsEditOpen(true);
                             }}
                             className="p-1"
@@ -139,7 +115,7 @@ export default function Index({ auth, services }: ServicePageProps) {
                         </button>
                         <button
                             onClick={() => {
-                                setSelectedService(service);
+                                setSelectedJobTitle(jobTitle);
                                 setIsDeleteOpen(true);
                             }}
                             className="p-1"
@@ -154,7 +130,7 @@ export default function Index({ auth, services }: ServicePageProps) {
     ];
 
     const table = useReactTable({
-        data: services,
+        data: jobTitles,
         columns,
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
@@ -186,14 +162,14 @@ export default function Index({ auth, services }: ServicePageProps) {
                 <div className="flex h-fit w-full gap-5">
                     <div className="relative h-fit w-full">
                         <Input
-                            placeholder="Search service"
+                            placeholder="Search job title"
                             value={globalFilter}
                             onChange={(e) => setGlobalFilter(e.target.value)}
                             className="pl-10"
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
-                    <CreateServiceModal
+                    <CreateJobTitleModal
                         open={isCreateOpen}
                         onOpenChange={setIsCreateOpen}
                     />
@@ -327,21 +303,21 @@ export default function Index({ auth, services }: ServicePageProps) {
                 </div>
             </div>
 
-            {selectedService && (
+            {selectedJobTitle && (
                 <>
-                    <EditServiceModal
-                        prev={selectedService}
+                    <EditJobTitleModal
+                        prev={selectedJobTitle}
                         open={isEditOpen}
                         onOpenChange={setIsEditOpen}
                     />
-                    <DeleteServiceModal
-                        id={selectedService.id}
-                        name={selectedService.name}
+                    <DeleteJobTitleModal
+                        id={selectedJobTitle.id}
+                        title={selectedJobTitle.title}
                         open={isDeleteOpen}
                         onOpenChange={setIsDeleteOpen}
                     />
-                    <ShowServiceModal
-                        service={selectedService}
+                    <ShowJobTitleModal
+                        jobTitle={selectedJobTitle}
                         open={isShowOpen}
                         onOpenChange={setIsShowOpen}
                     />

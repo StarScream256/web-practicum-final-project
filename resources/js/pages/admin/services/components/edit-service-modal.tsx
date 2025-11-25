@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { update } from '@/routes/admin/service';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
@@ -84,7 +85,7 @@ export default function EditServiceModal({
                         <Label htmlFor="description">
                             Description (optional)
                         </Label>
-                        <Input
+                        <Textarea
                             id="description"
                             placeholder="Service description (optional)"
                             value={data.description}
@@ -115,9 +116,9 @@ export default function EditServiceModal({
                                 )
                             }
                         />
-                        {errors.description && (
+                        {errors.duration_minutes && (
                             <p className="text-sm text-red-500">
-                                {errors.description}
+                                {errors.duration_minutes}
                             </p>
                         )}
                     </div>
@@ -137,9 +138,9 @@ export default function EditServiceModal({
                                 setData('cost', Number(e.target.value))
                             }
                         />
-                        {errors.description && (
+                        {errors.cost && (
                             <p className="text-sm text-red-500">
-                                {errors.description}
+                                {errors.cost}
                             </p>
                         )}
                     </div>
