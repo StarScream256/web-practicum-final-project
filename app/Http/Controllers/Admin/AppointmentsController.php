@@ -41,15 +41,16 @@ class AppointmentsController extends Controller
         Log::info('Appointments retrieved', ['count' => $appointment]);
         if (Invoice::where('appointment_id', $appointment->id)->exists()) {
             return to_route('admin.appointments.index')->with(
-                'failed',
+                'error',
                 'Appointment creation failed',
             );
         }
         try {
-            $totalAmount = DB::table('appointment_services')
-                ->where('appointment_id', $appointment->id)
-                ->selectRaw('SUM(price * quantity) as total_amount')
-                ->value('total_amount') ?? 0;
+            $totalAmount =
+                DB::table('appointment_services')
+                    ->where('appointment_id', $appointment->id)
+                    ->selectRaw('SUM(price * quantity) as total_amount')
+                    ->value('total_amount') ?? 0;
 
             DB::transaction(function () use ($appointment, $totalAmount) {
                 Invoice::create([
@@ -70,9 +71,11 @@ class AppointmentsController extends Controller
                 'Invoice has been created',
             );
         } catch (Exception $error) {
-            Log::error('Error during appointment check-in', ['error' => $error->getMessage()]);
+            Log::error('Error during appointment check-in', [
+                'error' => $error->getMessage(),
+            ]);
             return to_route('admin.appointments.index')->with(
-                'failed',
+                'error',
                 'Appointment creation failed',
             );
         }
@@ -80,62 +83,71 @@ class AppointmentsController extends Controller
     public function checkout(Invoice $invoice)
     {
         Log::info('Appointments retrieved', ['count' => $invoice]);
-        $invoice->load('transactions', 'appointment.patient.user', 'appointment.staff.user');
+        $invoice->load(
+            'transactions',
+            'appointment.patient.user',
+            'appointment.staff.user',
+        );
         return Inertia::render('admin/appointments/checkout', [
             'invoice' => $invoice,
         ]);
     }
 
     public function transaction(Request $request, Invoice $invoice)
-{
-    Log::info('Transaction request received', ['invoice_id' => $invoice->id]);
+    {
+        Log::info('Transaction request received', [
+            'invoice_id' => $invoice->id,
+        ]);
 
-    $validated = $request->validate([
-        'payment_method' => ['required', 'string', 'in:cash,credit_card,debit_card,bank_transfer'],
-        'notes' => ['nullable', 'string'],
-    ]);
+        $validated = $request->validate([
+            'payment_method' => [
+                'required',
+                'string',
+                'in:cash,insurance,bank_transfer',
+            ],
+            'notes' => ['nullable', 'string'],
+        ]);
 
-    if ($invoice->status === 'paid') {
-        return to_route('admin.appointments.index')->with(
-            'failed',
-            'Invoice has already been paid',
-        );
-    }
+        if ($invoice->status === 'paid') {
+            return to_route('admin.appointments.index')->with(
+                'error',
+                'Invoice has already been paid',
+            );
+        }
 
-    try {
-        DB::transaction(function () use ($invoice, $validated) {
-            Transaction::create([
-                'invoice_id' => $invoice->id,
-                'amount_paid' => $invoice->total_amount,
-                'payment_method' => $validated['payment_method'],
-                'payment_date' => Carbon::now('Asia/Jakarta'),
-                'reference_number' => null,
-                'notes' => $validated['notes'] ?? null,
-            ]);
-
-            $invoice->update([
-                'status' => 'paid',
-            ]);
-
-            $appointment = $invoice->appointment;
-            if ($appointment) {
-                $appointment->update([
-                    'status' => 'completed',
-                    'check_out_time' => Carbon::now('Asia/Jakarta'),
+        try {
+            DB::transaction(function () use ($invoice, $validated) {
+                Transaction::create([
+                    'invoice_id' => $invoice->id,
+                    'amount_paid' => $invoice->total_amount,
+                    'payment_method' => $validated['payment_method'],
+                    'payment_date' => Carbon::now('Asia/Jakarta'),
+                    'reference_number' => null,
+                    'notes' => $validated['notes'] ?? null,
                 ]);
-            }
-        });
 
-        return to_route('admin.appointments.index')->with(
-            'success',
-            'Payment completed successfully',
-        );
-    } catch (Exception $error) {
-        return to_route('admin.appointments.index')->with(
-            'failed',
-            'Payment processing failed',
-        );
+                $invoice->update([
+                    'status' => 'paid',
+                ]);
+
+                $appointment = $invoice->appointment;
+                if ($appointment) {
+                    $appointment->update([
+                        'status' => 'completed',
+                        'check_out_time' => Carbon::now('Asia/Jakarta'),
+                    ]);
+                }
+            });
+
+            return to_route('admin.appointments.index')->with(
+                'success',
+                'Payment completed successfully',
+            );
+        } catch (Exception $error) {
+            return to_route('admin.appointments.index')->with(
+                'error',
+                'Payment processing failed',
+            );
+        }
     }
-}
-
 }
