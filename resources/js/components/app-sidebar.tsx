@@ -10,14 +10,15 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard as adminDashboard } from '@/routes/admin';
-import { index as adminServiceIndex } from '@/routes/admin/service';
+import { index as adminAppointmentIndex } from '@/routes/admin/appointments';
 import { index as adminPatientsIndex } from '@/routes/admin/patients';
+import { index as adminServiceIndex } from '@/routes/admin/service';
 import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
+import { index as adminTransactionsIndex } from '@/routes/admin/transactions';
 import { dashboard as patientDashboard } from '@/routes/patient';
 import { index as patientAppointmentIndex } from '@/routes/patient/appointment';
-import { index as adminAppointmentIndex } from '@/routes/admin/appointments';
-import { index as adminTransactionsIndex } from '@/routes/admin/transactions';
+import { index as patientInvoicesIndex } from '@/routes/patient/invoices';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -95,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Invoices',
-            href: '',
+            href: patientInvoicesIndex(),
             icon: ReceiptText,
         },
     ];

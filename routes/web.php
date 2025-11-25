@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AppointmentsController as AdminAppointmentsContro
 use App\Http\Controllers\Admin\TransactionsController as AdminTransactionsController;
 use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
+use App\Http\Controllers\Patient\InvoiceController as PatientInvoiceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -54,6 +55,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         PatientAppointmentController::class,
                         'destroy',
                     ])->name('destroy');
+                });
+
+            Route::prefix('invoices')
+                ->name('invoices.')
+                ->group(function () {
+                    Route::get('', [
+                        PatientInvoiceController::class,
+                        'index',
+                    ])->name('index');
                 });
         });
 
