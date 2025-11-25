@@ -114,7 +114,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminStaffController::class,
                         'create',
                     ])->name('create');
-                    Route::get('store', [
+                    Route::post('store', [
                         AdminStaffController::class,
                         'store',
                     ])->name('store');
