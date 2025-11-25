@@ -83,3 +83,8 @@ export function toHumanReadableDateTime(dateTime: string) {
 
     return `${humanReadableDate} at ${humanReadableTime}`;
 }
+
+export function toDbDate(date: Date) {
+    const isoString = date.toISOString();
+    return isoString.slice(0, 19).replace('T', ' ');
+}

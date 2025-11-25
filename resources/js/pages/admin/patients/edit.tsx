@@ -15,10 +15,11 @@ import {
 } from '@/routes/admin/patients';
 
 import AppLayout from '@/layouts/app-layout';
+import { toDbDate } from '@/lib/utils';
+import { InputCalendar } from '@/pages/patient/appointment/components/input-calendar';
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/react';
-import React, { useEffect } from 'react';
-import { usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import React from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -59,7 +60,7 @@ export default function Edit(props: PatientEditPageProps) {
         { title: 'patient', href: adminPatientsIndex().url },
         { title: 'Edit patient', href: '' },
     ];
-    
+
     const { data, setData, patch, errors } = useForm({
         name: patient.name ?? '',
         email: patient.user?.email ?? '',
@@ -154,13 +155,9 @@ export default function Edit(props: PatientEditPageProps) {
 
                 {/* date of birth */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <Label htmlFor="dob">Date of Birth</Label>
-                    <Input
-                        id="dob"
-                        name="dob"
-                        type="date"
-                        value={data.dob}
-                        onChange={(e) => setData('dob', e.target.value)}
+                    <InputCalendar
+                        label="Date of Birth"
+                        onChange={(date) => setData('dob', toDbDate(date))}
                     />
                     {errors.dob && (
                         <p className="text-sm text-red-500">{errors.dob}</p>
