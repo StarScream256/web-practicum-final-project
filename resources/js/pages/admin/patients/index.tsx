@@ -13,9 +13,8 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes/admin';
 import {
-    index as adminPatientsIndex,
-    destroy as adminPatientsDestroy,
     edit as adminPatientEdit,
+    destroy as adminPatientsDestroy,
     show as adminPatientShow,
 } from '@/routes/admin/patients';
 import { BreadcrumbItem, PageProps } from '@/types';
@@ -111,10 +110,10 @@ const columns: ColumnDef<Patient>[] = [
             });
         },
     },
-    {
-        accessorKey: 'address',
-        header: 'Address',
-    },
+    // {
+    //     accessorKey: 'address',
+    //     header: 'Address',
+    // },
     {
         id: 'actions',
         header: 'Action',
@@ -131,10 +130,14 @@ const columns: ColumnDef<Patient>[] = [
 
             return (
                 <span className="flex h-fit w-fit items-center gap-3">
-                    <Link href={adminPatientShow({ patients: patients.id }).url}>
+                    <Link
+                        href={adminPatientShow({ patients: patients.id }).url}
+                    >
                         <View size={18} />
                     </Link>
-                    <Link href={adminPatientEdit({ patients: patients.id }).url}>
+                    <Link
+                        href={adminPatientEdit({ patients: patients.id }).url}
+                    >
                         <Pencil size={18} />
                     </Link>
                     <Dialog>
@@ -152,8 +155,8 @@ const columns: ColumnDef<Patient>[] = [
                                 <DialogDescription>
                                     This action cannot be undone. This will
                                     permanently delete the staff member{' '}
-                                    <strong>{patients.name}</strong> and
-                                    their associated user account.
+                                    <strong>{patients.name}</strong> and their
+                                    associated user account.
                                 </DialogDescription>
                             </DialogHeader>
                             <DialogFooter>
@@ -171,7 +174,7 @@ const columns: ColumnDef<Patient>[] = [
                     </Dialog>
                 </span>
             );
-        }
+        },
     },
 ];
 
@@ -241,12 +244,12 @@ export default function Index({ patients }: AdminPatientsIndexProps) {
                                                 <>
                                                     {header.column.getIsSorted() ===
                                                         'asc' && (
-                                                            <ArrowUp size={14} />
-                                                        )}
+                                                        <ArrowUp size={14} />
+                                                    )}
                                                     {header.column.getIsSorted() ===
                                                         'desc' && (
-                                                            <ArrowDown size={14} />
-                                                        )}
+                                                        <ArrowDown size={14} />
+                                                    )}
                                                     {!header.column.getIsSorted() && (
                                                         <ArrowUpDown
                                                             size={14}
@@ -259,10 +262,10 @@ export default function Index({ patients }: AdminPatientsIndexProps) {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef
-                                                        .header,
-                                                    header.getContext(),
-                                                )}
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
                                         </div>
                                     </th>
                                 ))}
