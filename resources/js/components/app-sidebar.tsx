@@ -16,6 +16,8 @@ import { index as adminStaffIndex } from '@/routes/admin/staff';
 import { index as adminStaffAvailIndex } from '@/routes/admin/staff-availability';
 import { dashboard as patientDashboard } from '@/routes/patient';
 import { index as patientAppointmentIndex } from '@/routes/patient/appointment';
+import { index as adminAppointmentIndex } from '@/routes/admin/appointments';
+import { index as adminTransactionsIndex } from '@/routes/admin/transactions';
 import { PageProps, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -70,12 +72,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
         {
             title: 'Appointments',
-            href: '',
+            href: adminAppointmentIndex(),
             icon: ClipboardCheck,
         },
         {
             title: 'Transactions',
-            href: '',
+            href: adminTransactionsIndex(),
             icon: CircleDollarSign,
         },
     ];
