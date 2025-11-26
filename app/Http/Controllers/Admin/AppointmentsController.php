@@ -30,7 +30,7 @@ class AppointmentsController extends Controller
     {
         $appointment->load(['patient.user', 'staff.user', 'services']);
         $invoice = Invoice::where('appointment_id', $appointment->id)->first();
-        Log::info('Appointments retrieved', [$invoice]);
+        // Log::info('Appointments retrieved', [$invoice]);
         return Inertia::render('admin/appointments/show', [
             'appointment' => $appointment,
             'invoice' => $invoice,
@@ -38,7 +38,7 @@ class AppointmentsController extends Controller
     }
     public function checkIn(Appointment $appointment)
     {
-        Log::info('Appointments retrieved', ['count' => $appointment]);
+        // Log::info('Appointments retrieved', ['count' => $appointment]);
         if (Invoice::where('appointment_id', $appointment->id)->exists()) {
             return to_route('admin.appointments.index')->with(
                 'error',
@@ -82,7 +82,7 @@ class AppointmentsController extends Controller
     }
     public function checkout(Invoice $invoice)
     {
-        Log::info('Appointments retrieved', ['count' => $invoice]);
+        // Log::info('Appointments retrieved', ['count' => $invoice]);
         $invoice->load(
             'transactions',
             'appointment.patient.user',
@@ -93,12 +93,11 @@ class AppointmentsController extends Controller
         ]);
     }
 
-    public function transaction(Request $request, Invoice $invoice)
+    public function transaction(Request $request,Invoice $invoice)
     {
-        Log::info('Transaction request received', [
-            'invoice_id' => $invoice->id,
-        ]);
-
+        // Log::info('Transaction request received', [
+        //     $request,
+        // ]);
         $validated = $request->validate([
             'payment_method' => [
                 'required',
