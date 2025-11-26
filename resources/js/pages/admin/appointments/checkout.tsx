@@ -127,6 +127,7 @@ export default function Checkout({ invoice }: CheckoutPageProps) {
                                 <Label htmlFor="payment_method" className="text-base">Payment Method</Label>
                                 <Select
                                     value={data.payment_method}
+                                    defaultValue='cash'
                                     onValueChange={(value) => setData('payment_method', value)}
                                 >
                                     <SelectTrigger className="w-full mt-2">
@@ -134,8 +135,7 @@ export default function Checkout({ invoice }: CheckoutPageProps) {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="cash">Cash</SelectItem>
-                                        <SelectItem value="credit_card">Credit Card</SelectItem>
-                                        <SelectItem value="debit_card">Debit Card</SelectItem>
+                                        <SelectItem value="insurance">insurance</SelectItem>
                                         <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
                                     </SelectContent>
                                 </Select>
