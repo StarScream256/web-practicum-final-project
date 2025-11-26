@@ -158,8 +158,8 @@ interface DisplayFieldProps {
 export function DisplayField({ label, value, className = '' }: DisplayFieldProps) {
     return (
         <div className={`flex flex-col ${className}`}>
-            <span className="text-sm font-medium text-gray-700">{label}</span>
-            <span className={`text-base border border-dark p-1 pl-2 rounded-md ${value ? 'text-gray-900' : 'text-gray-400'}`}>
+            <span className="text-sm font-medium text-primary">{label}</span>
+            <span className={`text-base border border-dark p-1 pl-2 rounded-md ${value ? 'text-primary' : 'text-accent'}`}>
                 {value || 'N/A'}
             </span>
         </div>
@@ -167,10 +167,11 @@ export function DisplayField({ label, value, className = '' }: DisplayFieldProps
 }
 
 export default function Show(props: AppointmentPageProps) {
+    console.log(props)
     const { appointment, invoice } = props;
     const services = appointment.services;
-    const totalCost = services.reduce((total, service) => total + Number(service.cost * service.pivot.quantity), 0);
     console.log(invoice);
+    const totalCost = services.reduce((total, service) => total + Number(service.cost * service.pivot.quantity), 0);
     const table = useReactTable({
         data: services,
         columns,
@@ -258,16 +259,16 @@ export default function Show(props: AppointmentPageProps) {
                             Back to Appointment
                         </Button>
                     </Link>
-                    <Link href={adminAppointmentsCheckIn(appointment).url}>
-                        <Button type="button" variant={'default'}>
+                    <Link href={appointment.check_in_time?(""):(adminAppointmentsCheckIn(appointment).url)}>
+                        <Button type="button" variant={appointment.check_in_time?"ghost":"default"}>
                             Create Invoice
                         </Button>
                     </Link>
-                    <Link href={adminAppointmentsCheckout({invoice: invoice?.id!}).url}>
-                        <Button type="button" variant={'default'}>
+                    {invoice&&(<Link href={appointment.check_out_time?(""):(adminAppointmentsCheckout({invoice: invoice?.id!}).url)}>
+                        <Button type="button" variant={appointment.check_out_time?"ghost":'default'}>
                             Check out
                         </Button>
-                    </Link>
+                    </Link>)}
                 </div>
             </div>
             <h1 className="display-1 text-center">Services</h1>

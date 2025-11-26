@@ -19,9 +19,7 @@ import {
     ArrowUp,
     ArrowUpDown,
     Search,
-    View,
-    GamepadIcon,
-    Ghost,
+    ClipboardPenIcon
 } from 'lucide-react';
 import { BreadcrumbItem, PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
@@ -172,7 +170,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                             href={AppointmentShow({ appointment: appointment.id }).url}
                             className="p-1"
                         >
-                            <View size={18} />
+                            <ClipboardPenIcon size={20} />
                         </Link>
                     </span>
                 );

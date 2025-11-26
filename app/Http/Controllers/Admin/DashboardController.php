@@ -31,7 +31,6 @@ class DashboardController extends Controller
         $totalPatients = Patient::count();
         $totalStaff = Staff::count();
 
-        // Get all appointments with relationships
         $appointments = Appointment::with([
             'patient',
             'staff.jobTitle',
@@ -40,7 +39,6 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        // Get all doctors/staff
         $doctorRole = JobTitle::where('title', 'Doctor')->first();
         $doctors = Staff::with(['user', 'jobTitle'])
             ->when($doctorRole, function ($query) use ($doctorRole) {
