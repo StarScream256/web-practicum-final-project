@@ -1,4 +1,12 @@
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { toCurrency, toHumanReadableDateTime } from '@/lib/utils';
 import { dashboard as userDashboard } from '@/routes/patient';
@@ -91,6 +99,15 @@ export default function Index({ invoices }: PatientInvoiceIndexPageProps) {
             globalFilter,
         },
     });
+
+    const { pageIndex, pageSize } = table.getState().pagination;
+    const totalFilteredRows = table.getFilteredRowModel().rows.length;
+    const firstRowOnPage =
+        totalFilteredRows === 0 ? 0 : pageIndex * pageSize + 1;
+    const lastRowOnPage =
+        totalFilteredRows === 0
+            ? 0
+            : firstRowOnPage + table.getRowModel().rows.length - 1;
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Invoices" />
@@ -177,6 +194,66 @@ export default function Index({ invoices }: PatientInvoiceIndexPageProps) {
                         <p>No available data to display here</p>
                     </span>
                 )}
+
+                <div className="flex items-center justify-between">
+                    {/* pagination selector */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm">Rows per page:</span>
+                        <Select
+                            value={`${table.getState().pagination.pageSize}`}
+                            onValueChange={(value) => {
+                                table.setPageSize(Number(value));
+                            }}
+                        >
+                            <SelectTrigger className="w-[70px]">
+                                <SelectValue
+                                    placeholder={
+                                        table.getState().pagination.pageSize
+                                    }
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {[2, 5, 10, 20, 50].map((pageSize) => (
+                                    <SelectItem
+                                        key={pageSize}
+                                        value={`${pageSize}`}
+                                    >
+                                        {pageSize}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* page number indicator */}
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                        Showing <strong>{firstRowOnPage}</strong> -{' '}
+                        <strong>{lastRowOnPage}</strong> of{' '}
+                        <strong>{totalFilteredRows}</strong> entries
+                    </span>
+
+                    {/* button navigation control */}
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            Previous
+                        </Button>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                            Page {table.getState().pagination.pageIndex + 1} of{' '}
+                            {table.getPageCount()}
+                        </span>
+                        <Button
+                            variant="outline"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            Next
+                        </Button>
+                    </div>
+                </div>
             </div>
         </AppLayout>
     );

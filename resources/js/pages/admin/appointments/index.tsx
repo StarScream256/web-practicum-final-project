@@ -27,6 +27,7 @@ import {
     ArrowDown,
     ArrowUp,
     ArrowUpDown,
+    CircleOff,
     ClipboardPenIcon,
     Search,
 } from 'lucide-react';
@@ -108,8 +109,7 @@ interface PatientAppointmentIndex extends PageProps {
     appointments: Appointment[];
 }
 
-export default function Index({ appointments }: PatientAppointmentIndex) {
-    console.log(appointments);
+export default function Index({ auth, appointments }: PatientAppointmentIndex) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const columns: ColumnDef<Appointment>[] = [
@@ -178,8 +178,12 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
         },
     ];
 
+    const appointmentsData =
+        auth.staff?.job_title === 'Doctor'
+            ? appointments.filter((appo) => appo.staff_id === auth.staff?.id)
+            : appointments;
     const table = useReactTable({
-        data: appointments,
+        data: appointmentsData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
@@ -220,7 +224,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                 </div>
 
                 {/* Table section */}
-                <div className="overflow-x-auto">
+                <div className="flex w-full flex-col gap-5 overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -290,7 +294,15 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                             ))}
                         </tbody>
                     </table>
-                    <div className="mt-4 flex items-center justify-between">
+
+                    {appointmentsData.length <= 0 && (
+                        <span className="flex h-fit w-full items-center justify-center gap-3 pt-3">
+                            <CircleOff size={18} />
+                            <p>No available data to display here</p>
+                        </span>
+                    )}
+
+                    <div className="flex items-center justify-between">
                         {/* pagination selector */}
                         <div className="flex items-center gap-2">
                             <span className="text-sm">Rows per page:</span>

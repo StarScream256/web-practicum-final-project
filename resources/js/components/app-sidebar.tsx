@@ -77,12 +77,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             href: adminAppointmentIndex(),
             icon: ClipboardCheck,
         },
-        {
-            title: 'Transactions',
-            href: adminTransactionsIndex(),
-            icon: CircleDollarSign,
-        },
     ];
+
+    const transactionNavItem: NavItem = {
+        title: 'Transactions',
+        href: adminTransactionsIndex(),
+        icon: CircleDollarSign,
+    };
+
+    if (
+        auth.staff?.job_title &&
+        ['Manager', 'Receptionist'].includes(auth.staff?.job_title)
+    ) {
+        adminNavItems.push(transactionNavItem);
+    }
 
     const userNavItems: NavItem[] = [
         {
