@@ -18,23 +18,8 @@ import AppLayout from '@/layouts/app-layout';
 import { toDbDate } from '@/lib/utils';
 import { InputCalendar } from '@/pages/patient/appointment/components/input-calendar';
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import React from 'react';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: adminDashboard().url,
-    },
-    {
-        title: 'patient',
-        href: adminPatientsIndex().url,
-    },
-    {
-        title: 'Edit patient',
-        href: '',
-    },
-];
 
 interface patient {
     id: number;
@@ -57,8 +42,8 @@ export default function Edit(props: PatientEditPageProps) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: adminDashboard().url },
-        { title: 'patient', href: adminPatientsIndex().url },
-        { title: 'Edit patient', href: '' },
+        { title: 'Patient', href: adminPatientsIndex().url },
+        { title: 'Edit Patient', href: '' },
     ];
 
     const { data, setData, patch, errors } = useForm({
@@ -74,8 +59,6 @@ export default function Edit(props: PatientEditPageProps) {
         e.preventDefault();
         patch(adminPatientUpdate(Number(patient.id)).url);
     }
-
-    const page = usePage();
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -156,6 +139,7 @@ export default function Edit(props: PatientEditPageProps) {
                 <div className="flex h-fit w-full flex-col gap-3">
                     <InputCalendar
                         label="Date of Birth"
+                        initialValue={new Date(data.dob)}
                         onChange={(date) => setData('dob', toDbDate(date))}
                     />
                     {errors.dob && (

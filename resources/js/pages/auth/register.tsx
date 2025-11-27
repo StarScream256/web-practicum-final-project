@@ -7,6 +7,13 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 
@@ -64,7 +71,22 @@ export default function Register() {
 
                                 <div className="grid gap-2">
                                     <Label>Gender</Label>
-                                    <span className="flex w-full gap-4">
+                                    <Select required name="gender">
+                                        <SelectTrigger id="doctor">
+                                            <SelectValue
+                                                placeholder={`Select gender`}
+                                            />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value={'male'}>
+                                                Male
+                                            </SelectItem>
+                                            <SelectItem value={'female'}>
+                                                Female
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {/* <span className="flex w-full gap-4">
                                         <Label
                                             htmlFor="genderMale"
                                             className="flex w-full items-center gap-2 rounded-sm px-3 py-2 outline-2 outline-transparent has-checked:bg-indigo-500/40 has-checked:outline-indigo-500"
@@ -97,7 +119,7 @@ export default function Register() {
                                             />
                                             <p>Female</p>
                                         </Label>
-                                    </span>
+                                    </span> */}
                                     <InputError
                                         message={errors.gender}
                                         className="mt-2"

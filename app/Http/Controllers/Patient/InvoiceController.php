@@ -16,7 +16,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::where('patient_user_id', Auth::id())->get();
+        $invoices = Invoice::with('appointment')
+            ->where('patient_user_id', Auth::id())
+            ->get();
         return Inertia::render('patient/invoice/index', [
             'invoices' => $invoices,
         ]);

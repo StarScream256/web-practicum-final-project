@@ -1,12 +1,5 @@
-import {
-    index as AppointmentsIndex,
-    show as AppointmentShow,
-} from '@/routes/admin/appointments';
-import { dashboard } from '@/routes/admin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import AppLayout from '@/layouts/app-layout';
-import { toHumanReadableDateTime } from '@/lib/utils';
 import {
     Select,
     SelectContent,
@@ -14,13 +7,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    ArrowDown,
-    ArrowUp,
-    ArrowUpDown,
-    Search,
-    ClipboardPenIcon
-} from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
+import { toHumanReadableDateTime } from '@/lib/utils';
+import { dashboard } from '@/routes/admin';
+import { show as AppointmentShow } from '@/routes/admin/appointments';
 import { BreadcrumbItem, PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -33,6 +23,13 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
+import {
+    ArrowDown,
+    ArrowUp,
+    ArrowUpDown,
+    ClipboardPenIcon,
+    Search,
+} from 'lucide-react';
 import { useState } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -167,7 +164,10 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                 return (
                     <span className="flex h-fit w-fit items-center gap-3">
                         <Link
-                            href={AppointmentShow({ appointment: appointment.id }).url}
+                            href={
+                                AppointmentShow({ appointment: appointment.id })
+                                    .url
+                            }
                             className="p-1"
                         >
                             <ClipboardPenIcon size={20} />
@@ -202,7 +202,6 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
             ? 0
             : firstRowOnPage + table.getRowModel().rows.length - 1;
 
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Appointments" />
@@ -214,9 +213,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                             placeholder="Search appointments"
                             className="pl-10"
                             value={globalFilter ?? ''}
-                            onChange={(e) =>
-                                setGlobalFilter(e.target.value)
-                            }
+                            onChange={(e) => setGlobalFilter(e.target.value)}
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
@@ -224,7 +221,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
 
                 {/* Table section */}
                 <div className="overflow-x-auto">
-                    <table className="w-full table-auto border-collapse">
+                    <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
@@ -232,7 +229,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                                         <th
                                             key={header.id}
                                             scope="col"
-                                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                         >
                                             <div
                                                 className="flex cursor-pointer items-center gap-2 select-none"
@@ -243,12 +240,16 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                                                     <>
                                                         {header.column.getIsSorted() ===
                                                             'asc' && (
-                                                                <ArrowUp size={14} />
-                                                            )}
+                                                            <ArrowUp
+                                                                size={14}
+                                                            />
+                                                        )}
                                                         {header.column.getIsSorted() ===
                                                             'desc' && (
-                                                                <ArrowDown size={14} />
-                                                            )}
+                                                            <ArrowDown
+                                                                size={14}
+                                                            />
+                                                        )}
                                                         {!header.column.getIsSorted() && (
                                                             <ArrowUpDown
                                                                 size={14}
@@ -261,10 +262,10 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                                                 {header.isPlaceholder
                                                     ? null
                                                     : flexRender(
-                                                        header.column.columnDef
-                                                            .header,
-                                                        header.getContext(),
-                                                    )}
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext(),
+                                                      )}
                                             </div>
                                         </th>
                                     ))}
@@ -277,7 +278,7 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                                     {row.getVisibleCells().map((cell) => (
                                         <td
                                             key={cell.id}
-                                            className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                            className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
@@ -336,8 +337,8 @@ export default function Index({ appointments }: PatientAppointmentIndex) {
                                 Previous
                             </Button>
                             <span className="text-sm text-gray-700 dark:text-gray-300">
-                                Page {table.getState().pagination.pageIndex + 1} of{' '}
-                                {table.getPageCount()}
+                                Page {table.getState().pagination.pageIndex + 1}{' '}
+                                of {table.getPageCount()}
                             </span>
                             <Button
                                 variant="outline"

@@ -179,7 +179,7 @@ export default function RecentAppointments({
                                 <th
                                     key={header.id}
                                     scope="col"
-                                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                 >
                                     <div className="flex cursor-pointer items-center gap-2 select-none">
                                         {header.isPlaceholder
@@ -201,7 +201,7 @@ export default function RecentAppointments({
                             {row.getVisibleCells().map((cell) => (
                                 <td
                                     key={cell.id}
-                                    className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                    className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,

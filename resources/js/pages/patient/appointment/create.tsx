@@ -59,6 +59,8 @@ export default function CreateAppointment({
     appointments,
     services,
 }: CreateAppointmentProps) {
+    const consultation = services.find((s) => s.name === 'Consultation');
+
     const { data, setData, post, errors } = useForm<{
         patient_id: number;
         staff_id: number;
@@ -69,7 +71,7 @@ export default function CreateAppointment({
     }>({
         patient_id: auth.user.id,
         staff_id: -1,
-        services: [],
+        services: consultation ? [consultation.id] : [],
         appointment_start_time: '',
         appointment_end_time: '',
         notes: '',
@@ -304,6 +306,9 @@ export default function CreateAppointment({
                                         checked={data.services.includes(
                                             service.id,
                                         )}
+                                        disabled={
+                                            service.name === 'Consultation'
+                                        }
                                         onChange={(e) =>
                                             handleServiceChange(
                                                 service.id,

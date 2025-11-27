@@ -1,12 +1,6 @@
-import { dashboard as adminDashboard } from '@/routes/admin';
-import {
-    index as adminAppointmentsIndex,
-    checkIn as adminAppointmentsCheckIn,
-    checkout as adminAppointmentsCheckout,
-} from '@/routes/admin/appointments';
-import CheckoutModal from './component.tsx/checkout-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -14,11 +8,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { toHumanReadableDateTime } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { toCurrency, toHumanReadableDateTime } from '@/lib/utils';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import {
+    markDoctor as adminAppointmentMarkDoctor,
+    checkIn as adminAppointmentsCheckIn,
+    index as adminAppointmentsIndex,
+} from '@/routes/admin/appointments';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
 import {
     ColumnDef,
     flexRender,
@@ -29,13 +29,16 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
 import {
     ArrowDown,
+    ArrowLeft,
     ArrowUp,
     ArrowUpDown,
+    Check,
     Search,
 } from 'lucide-react';
+import { useState } from 'react';
+import CheckoutModal from './components/checkout-modal';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,11 +46,11 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: adminDashboard().url,
     },
     {
-        title: 'Patients',
+        title: 'Appointments',
         href: adminAppointmentsIndex().url,
     },
     {
-        title: 'Patient Details',
+        title: 'Appointment Details',
         href: '',
     },
 ];
@@ -92,7 +95,7 @@ export interface Service {
         added_by: string;
         quantity: number;
         price: number;
-    }
+    };
 }
 
 export interface AppointmentService {
@@ -102,7 +105,6 @@ export interface AppointmentService {
     quantity: number;
     service_id: number;
     service: Service;
-
 }
 
 export interface Appointment {
@@ -149,26 +151,25 @@ const columns: ColumnDef<Service>[] = [
     {
         id: 'rowNumber',
         header: 'No',
-        cell: (info) => info.row.index + 1
+        cell: (info) => info.row.index + 1,
     },
     {
-        accessorFn: row => row.name,
-        header: 'Service'
+        accessorFn: (row) => row.name,
+        header: 'Service',
     },
     {
-        accessorFn: row => String(row.cost),
-        header: 'Cost'
+        accessorFn: (row) => String(row.cost),
+        header: 'Cost',
     },
     {
-        accessorFn: row => row.pivot.quantity,
-        header: 'Quantity'
+        accessorFn: (row) => row.pivot.quantity,
+        header: 'Quantity',
     },
-    {
-        accessorFn: row => row.description,
-        header: 'Description'
-    },
+    // {
+    //     accessorFn: (row) => row.description,
+    //     header: 'Description',
+    // },
 ];
-
 
 interface DisplayFieldProps {
     label: string;
@@ -176,22 +177,32 @@ interface DisplayFieldProps {
     className?: string;
 }
 
-export function DisplayField({ label, value, className = '' }: DisplayFieldProps) {
+export function DisplayField({
+    label,
+    value,
+    className = '',
+}: DisplayFieldProps) {
     return (
-        <div className={`flex flex-col ${className}`}>
-            <span className="text-sm font-medium text-primary">{label}</span>
-            <span className={`text-base border border-dark p-1 pl-2 rounded-md ${value ? 'text-primary' : 'text-accent'}`}>
-                {value || 'N/A'}
-            </span>
+        <div className={`flex flex-col gap-3 ${className}`}>
+            <Label>{label}</Label>
+            <Input
+                readOnly
+                className={!value ? 'text-gray-500/70' : ''}
+                value={value || 'N/A'}
+            />
         </div>
     );
 }
 
 export default function Show(props: AppointmentPageProps) {
-    const { appointment, invoice } = props;
+    const { auth, appointment, invoice } = props;
     console.log(invoice);
     const services = appointment.services;
-    const totalCost = services.reduce((total, service) => total + Number(service.cost * service.pivot.quantity), 0);
+    const totalCost = services.reduce(
+        (total, service) =>
+            total + Number(service.cost * service.pivot.quantity),
+        0,
+    );
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');
     const [transactionModal, setTransaction] = useState(false);
@@ -220,21 +231,33 @@ export default function Show(props: AppointmentPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Patient Details" />
+            <Head title="Appointment Details" />
             <div className="grid h-fit grid-cols-2 gap-5 overflow-x-auto rounded-xl p-4">
+                <h1 className="col-span-2 text-lg font-bold">
+                    Appointment details
+                </h1>
                 {/* name */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Name" value={appointment.patient.name} />
+                    <DisplayField
+                        label="Name"
+                        value={appointment.patient.name}
+                    />
                 </div>
 
                 {/* gender */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Gender" value={appointment.patient.gender} />
+                    <DisplayField
+                        label="Gender"
+                        value={appointment.patient.gender}
+                    />
                 </div>
 
                 {/* staff */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Doctor" value={appointment.staff.name} />
+                    <DisplayField
+                        label="Doctor"
+                        value={appointment.staff.name}
+                    />
                 </div>
 
                 {/* status */}
@@ -244,40 +267,56 @@ export default function Show(props: AppointmentPageProps) {
 
                 {/* check in time */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Check in" value={appointment.check_in_time ?
-                        new Date(appointment.check_in_time).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }) :
-                        ''
-                    } />
+                    <DisplayField
+                        label="Check in"
+                        value={
+                            appointment.check_in_time
+                                ? toHumanReadableDateTime(
+                                      appointment.check_in_time,
+                                  )
+                                : ''
+                        }
+                    />
+                </div>
+
+                {/* check in time */}
+                <div className="flex h-fit w-full flex-col gap-3">
+                    <DisplayField
+                        label="Seen by doctor"
+                        value={
+                            appointment.seen_by_doctor_time
+                                ? toHumanReadableDateTime(
+                                      appointment.seen_by_doctor_time,
+                                  )
+                                : ''
+                        }
+                    />
                 </div>
 
                 {/* check out time */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Check out" value={appointment.check_out_time ?
-                        new Date(appointment.check_out_time).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }) :
-                        ''
-                    } />
+                    <DisplayField
+                        label="Check out"
+                        value={
+                            appointment.check_out_time
+                                ? toHumanReadableDateTime(
+                                      appointment.check_out_time,
+                                  )
+                                : ''
+                        }
+                    />
                 </div>
-
-                {/* notes */}
-                <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Notes" value={appointment.notes} />
-                </div>
-
                 {/* total Bill */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Total Bill" value={"Rp. " + (new Intl.NumberFormat('id-ID').format(totalCost))} />
+                    <DisplayField
+                        label="Total Bill"
+                        value={toCurrency(totalCost)}
+                    />
+                </div>
+
+                <div className="col-span-2 flex h-fit w-full flex-col gap-3">
+                    <Label>Notes</Label>
+                    <Textarea readOnly value={appointment.notes ?? '-'} />
                 </div>
 
                 <div className="col-span-2 flex w-full justify-center gap-5">
@@ -287,23 +326,77 @@ export default function Show(props: AppointmentPageProps) {
                             Back to Appointment
                         </Button>
                     </Link>
-                    <Link href={appointment.check_in_time ? ("") : (adminAppointmentsCheckIn(appointment).url)}>
-                        <Button type="button" variant={appointment.check_in_time ? "ghost" : "default"}>
-                            Create Invoice
-                        </Button>
-                    </Link>
-                    <Button type="button" variant={invoice && (!appointment.check_out_time)? "default" : "ghost"} onClick={() => {
-                            if(!appointment.check_out_time){
-                                setTransaction(true)
-                            }
-                        }}>
-                        Proceed to Payment
-                    </Button>
+                    {auth.staff?.job_title === 'Doctor' &&
+                        !appointment.seen_by_doctor_time && (
+                            <Link
+                                href={
+                                    adminAppointmentMarkDoctor({
+                                        appointment: appointment.id,
+                                    }).url
+                                }
+                            >
+                                <Button>
+                                    <Check />
+                                    Marked as checked
+                                </Button>
+                            </Link>
+                        )}
+                    {auth.staff?.job_title &&
+                        ['Manager', 'Receptionist'].includes(
+                            auth.staff?.job_title,
+                        ) && (
+                            <>
+                                <Link
+                                    href={
+                                        appointment.check_in_time
+                                            ? ''
+                                            : adminAppointmentsCheckIn(
+                                                  appointment,
+                                              ).url
+                                    }
+                                >
+                                    <Button
+                                        type="button"
+                                        disabled={
+                                            appointment.check_in_time !== null
+                                        }
+                                        variant={
+                                            appointment.check_in_time
+                                                ? 'ghost'
+                                                : 'default'
+                                        }
+                                    >
+                                        Check-In & Create Invoice
+                                    </Button>
+                                </Link>
+                                <Button
+                                    type="button"
+                                    disabled={
+                                        !invoice ||
+                                        appointment.check_out_time !== null
+                                    }
+                                    variant={
+                                        invoice && !appointment.check_out_time
+                                            ? 'default'
+                                            : 'ghost'
+                                    }
+                                    onClick={() => {
+                                        if (!appointment.check_out_time) {
+                                            setTransaction(true);
+                                        }
+                                    }}
+                                >
+                                    {appointment.check_out_time
+                                        ? 'Already paid'
+                                        : 'Check-Out & Proceed to payment'}
+                                </Button>
+                            </>
+                        )}
                 </div>
             </div>
-            <h1 className="display-1 text-center">Services</h1>
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
 
+            <div className="flex h-full w-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-5">
+                <h1 className="text-lg font-bold">Services</h1>
                 {/* search bar */}
                 <div className="flex h-fit w-full gap-5">
                     <div className="relative h-fit w-full">
@@ -316,7 +409,7 @@ export default function Show(props: AppointmentPageProps) {
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
                 </div>
-                <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 ml-4 mr-4">
+                <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
@@ -324,7 +417,7 @@ export default function Show(props: AppointmentPageProps) {
                                     <th
                                         key={header.id}
                                         scope="col"
-                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         <div
                                             className="flex cursor-pointer items-center gap-2 select-none"
@@ -335,12 +428,12 @@ export default function Show(props: AppointmentPageProps) {
                                                 <>
                                                     {header.column.getIsSorted() ===
                                                         'asc' && (
-                                                            <ArrowUp size={14} />
-                                                        )}
+                                                        <ArrowUp size={14} />
+                                                    )}
                                                     {header.column.getIsSorted() ===
                                                         'desc' && (
-                                                            <ArrowDown size={14} />
-                                                        )}
+                                                        <ArrowDown size={14} />
+                                                    )}
                                                     {!header.column.getIsSorted() && (
                                                         <ArrowUpDown
                                                             size={14}
@@ -353,10 +446,10 @@ export default function Show(props: AppointmentPageProps) {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef
-                                                        .header,
-                                                    header.getContext(),
-                                                )}
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
                                         </div>
                                     </th>
                                 ))}
@@ -369,7 +462,7 @@ export default function Show(props: AppointmentPageProps) {
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

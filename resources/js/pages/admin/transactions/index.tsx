@@ -1,12 +1,5 @@
-import {
-    index as TransactionsIndex,
-    show as TransactionsShow,
-} from '@/routes/admin/transactions';
-import { dashboard } from '@/routes/admin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import AppLayout from '@/layouts/app-layout';
-import { toHumanReadableDateTime } from '@/lib/utils';
 import {
     Select,
     SelectContent,
@@ -14,15 +7,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    ArrowDown,
-    ArrowUp,
-    ArrowUpDown,
-    Search,
-    View,
-    GamepadIcon,
-    Ghost,
-} from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
+import { toHumanReadableDateTime } from '@/lib/utils';
+import { dashboard } from '@/routes/admin';
+import { show as TransactionsShow } from '@/routes/admin/transactions';
 import { BreadcrumbItem, PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import {
@@ -35,6 +23,14 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
+import {
+    ArrowDown,
+    ArrowUp,
+    ArrowUpDown,
+    Ghost,
+    Search,
+    View,
+} from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -107,20 +103,36 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                 return `${row.original.invoice.appointment.patient.name}`;
             },
         },
+        // {
+        //     accessorKey: 'invoice.appointment.staff.name',
+        //     header: 'Doctor',
+        //     accessorFn: (row) => row.invoice.appointment.staff.name,
+        //     cell: ({ row }) => {
+        //         return `${row.original.invoice.appointment.staff.name}`;
+        //     },
+        // },
         {
-            accessorKey: 'invoice.appointment.staff.name',
-            header: 'Doctor',
-            accessorFn: (row) => row.invoice.appointment.staff.name,
-            cell: ({ row }) => {
-                return `${row.original.invoice.appointment.staff.name}`;
-            },
+            accessorKey: 'payment_date',
+            header: 'Payment Date',
+            cell: ({ row }) =>
+                toHumanReadableDateTime(row.original.payment_date),
         },
         {
             accessorKey: 'payment_method',
             header: 'Payment Method',
             accessorFn: (row) => row.payment_method,
             cell: ({ row }) => {
-                return `${row.original.payment_method}`;
+                function formatPaymentMethod(method: string) {
+                    return method
+                        .split(/[\s,_-]+/)
+                        .map(
+                            (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(' ');
+                }
+
+                return `${formatPaymentMethod(row.original.payment_method)}`;
             },
         },
         {
@@ -140,7 +152,11 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                 return (
                     <span className="flex h-fit w-fit items-center gap-3">
                         <Link
-                            href={TransactionsShow({ transactions: transactions.id }).url}
+                            href={
+                                TransactionsShow({
+                                    transaction: transactions.id,
+                                }).url
+                            }
                             className="p-1"
                         >
                             <View size={18} />
@@ -186,89 +202,102 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                             placeholder="Search appointments"
                             className="pl-10"
                             value={globalFilter ?? ''}
-                            onChange={(e) =>
-                                setGlobalFilter(e.target.value)
-                            }
+                            onChange={(e) => setGlobalFilter(e.target.value)}
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
                 </div>
 
                 {/* Table Section */}
-                <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-                    <table className="w-full table-auto border-collapse">
-                        <thead className="bg-gray-50 dark:bg-gray-800">
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <tr key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => (
-                                        <th
-                                            key={header.id}
-                                            scope="col"
-                                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
+                <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                    <thead>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        scope="col"
+                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
+                                    >
+                                        <div
+                                            className="flex cursor-pointer items-center gap-2 select-none"
+                                            onClick={header.column.getToggleSortingHandler()}
                                         >
-                                            <div
-                                                className="flex cursor-pointer items-center gap-2 select-none"
-                                                onClick={header.column.getToggleSortingHandler()}
-                                            >
-                                                {/* Sorting Icon */}
-                                                {header.column.getCanSort() && (
-                                                    <>
-                                                        {header.column.getIsSorted() === 'asc' && (
-                                                            <ArrowUp size={14} />
-                                                        )}
-                                                        {header.column.getIsSorted() === 'desc' && (
-                                                            <ArrowDown size={14} />
-                                                        )}
-                                                        {!header.column.getIsSorted() && (
-                                                            <ArrowUpDown size={14} />
-                                                        )}
-                                                    </>
-                                                )}
-
-                                                {/* Header Title */}
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext(),
+                                            {/* Sorting Icon */}
+                                            {header.column.getCanSort() && (
+                                                <>
+                                                    {header.column.getIsSorted() ===
+                                                        'asc' && (
+                                                        <ArrowUp size={14} />
                                                     )}
-                                            </div>
-                                        </th>
+                                                    {header.column.getIsSorted() ===
+                                                        'desc' && (
+                                                        <ArrowDown size={14} />
+                                                    )}
+                                                    {!header.column.getIsSorted() && (
+                                                        <ArrowUpDown
+                                                            size={14}
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
+
+                                            {/* Header Title */}
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
+                                        </div>
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                        {table.getRowModel().rows.length > 0 ? (
+                            table.getRowModel().rows.map((row) => (
+                                <tr
+                                    key={row.id}
+                                    className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <td
+                                            key={cell.id}
+                                            className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
+                                        >
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
+                                        </td>
                                     ))}
                                 </tr>
-                            ))}
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                            {table.getRowModel().rows.length > 0 ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                        {row.getVisibleCells().map((cell) => (
-                                            <td
-                                                key={cell.id}
-                                                className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext(),
-                                                )}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={columns.length} className="py-8 text-center">
-                                        <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                                            <Ghost size={48} className="mb-2 opacity-50" />
-                                            <p>No transactions found</p>
-                                            <p className="text-sm">No payment transactions have been recorded yet.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={columns.length}
+                                    className="py-8 text-center"
+                                >
+                                    <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                                        <Ghost
+                                            size={48}
+                                            className="mb-2 opacity-50"
+                                        />
+                                        <p>No transactions found</p>
+                                        <p className="text-sm">
+                                            No payment transactions have been
+                                            recorded yet.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
 
                 {/* Pagination Section */}
                 {table.getRowModel().rows.length > 0 && (
@@ -285,11 +314,18 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                                 }}
                             >
                                 <SelectTrigger className="w-[70px]">
-                                    <SelectValue placeholder={table.getState().pagination.pageSize} />
+                                    <SelectValue
+                                        placeholder={
+                                            table.getState().pagination.pageSize
+                                        }
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {[10, 20, 30, 40, 50].map((pageSize) => (
-                                        <SelectItem key={pageSize} value={`${pageSize}`}>
+                                        <SelectItem
+                                            key={pageSize}
+                                            value={`${pageSize}`}
+                                        >
                                             {pageSize}
                                         </SelectItem>
                                     ))}
@@ -314,8 +350,8 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                                 Previous
                             </Button>
                             <span className="text-sm text-gray-700 dark:text-gray-300">
-                                Page {table.getState().pagination.pageIndex + 1} of{' '}
-                                {table.getPageCount()}
+                                Page {table.getState().pagination.pageIndex + 1}{' '}
+                                of {table.getPageCount()}
                             </span>
                             <Button
                                 variant="outline"

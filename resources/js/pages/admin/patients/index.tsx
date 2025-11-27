@@ -68,119 +68,135 @@ interface AdminPatientsIndexProps extends PageProps {
     patients: Patient[];
 }
 
-const columns: ColumnDef<Patient>[] = [
-    {
-        id: 'rowNumber',
-        header: 'No',
-        accessorFn: (row, index) => index,
-        cell: (info) => info.row.index + 1,
-        enableSorting: true,
-    },
-    {
-        accessorKey: 'name',
-        header: 'Name',
-    },
-    {
-        accessorKey: 'user.email',
-        header: 'Email',
-    },
-    {
-        accessorKey: 'phone',
-        header: 'Phone',
-    },
-    {
-        accessorKey: 'gender',
-        header: 'Gender',
-        cell: ({ row }) => {
-            return (
-                row.original.gender.charAt(0).toUpperCase() +
-                row.original.gender.slice(1)
-            );
-        },
-    },
-    {
-        accessorKey: 'dob',
-        header: 'Date of Birth',
-        cell: ({ row }) => {
-            const date = new Date(row.original.dob);
-            return date.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            });
-        },
-    },
-    // {
-    //     accessorKey: 'address',
-    //     header: 'Address',
-    // },
-    {
-        id: 'actions',
-        header: 'Action',
-        enableSorting: false,
-        cell: ({ row }) => {
-            const patients = row.original;
-
-            const handleDelete = () => {
-                router.delete(adminPatientsDestroy({ patients: patients.id }), {
-                    preserveState: true,
-                    preserveScroll: true,
-                });
-            };
-
-            return (
-                <span className="flex h-fit w-fit items-center gap-3">
-                    <Link
-                        href={adminPatientShow({ patients: patients.id }).url}
-                    >
-                        <View size={18} />
-                    </Link>
-                    <Link
-                        href={adminPatientEdit({ patients: patients.id }).url}
-                    >
-                        <Pencil size={18} />
-                    </Link>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <button className="cursor-pointer text-red-500">
-                                <span className="sr-only">Delete</span>
-                                <Trash size={18} />
-                            </button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>
-                                    Are you absolutely sure?
-                                </DialogTitle>
-                                <DialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete the staff member{' '}
-                                    <strong>{patients.name}</strong> and their
-                                    associated user account.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                                <Button
-                                    variant="destructive"
-                                    onClick={handleDelete}
-                                >
-                                    Yes, delete
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </span>
-            );
-        },
-    },
-];
-
-export default function Index({ patients }: AdminPatientsIndexProps) {
+export default function Index({ auth, patients }: AdminPatientsIndexProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');
+
+    const jobTitle = auth.staff?.job_title;
+    const columns: ColumnDef<Patient>[] = [
+        {
+            id: 'rowNumber',
+            header: 'No',
+            accessorFn: (row, index) => index,
+            cell: (info) => info.row.index + 1,
+            enableSorting: true,
+        },
+        {
+            accessorKey: 'name',
+            header: 'Name',
+        },
+        {
+            accessorKey: 'user.email',
+            header: 'Email',
+        },
+        {
+            accessorKey: 'phone',
+            header: 'Phone',
+        },
+        {
+            accessorKey: 'gender',
+            header: 'Gender',
+            cell: ({ row }) => {
+                return (
+                    row.original.gender.charAt(0).toUpperCase() +
+                    row.original.gender.slice(1)
+                );
+            },
+        },
+        {
+            accessorKey: 'dob',
+            header: 'Date of Birth',
+            cell: ({ row }) => {
+                const date = new Date(row.original.dob);
+                return date.toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                });
+            },
+        },
+        {
+            id: 'actions',
+            header: 'Action',
+            enableSorting: false,
+            cell: ({ row }) => {
+                const patients = row.original;
+
+                const handleDelete = () => {
+                    router.delete(
+                        adminPatientsDestroy({ patients: patients.id }),
+                        {
+                            preserveState: true,
+                            preserveScroll: true,
+                        },
+                    );
+                };
+
+                return (
+                    <span className="flex h-fit w-fit items-center gap-3">
+                        <Link
+                            href={
+                                adminPatientShow({ patients: patients.id }).url
+                            }
+                        >
+                            <View size={18} />
+                        </Link>
+                        {jobTitle === 'Manager' && (
+                            <>
+                                <Link
+                                    href={
+                                        adminPatientEdit({
+                                            patients: patients.id,
+                                        }).url
+                                    }
+                                >
+                                    <Pencil size={18} />
+                                </Link>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <button className="cursor-pointer text-red-500">
+                                            <span className="sr-only">
+                                                Delete
+                                            </span>
+                                            <Trash size={18} />
+                                        </button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                Are you absolutely sure?
+                                            </DialogTitle>
+                                            <DialogDescription>
+                                                This action cannot be undone.
+                                                This will permanently delete the
+                                                staff member{' '}
+                                                <strong>{patients.name}</strong>{' '}
+                                                and their associated user
+                                                account.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <DialogFooter>
+                                            <DialogClose asChild>
+                                                <Button variant="outline">
+                                                    Cancel
+                                                </Button>
+                                            </DialogClose>
+                                            <Button
+                                                variant="destructive"
+                                                onClick={handleDelete}
+                                            >
+                                                Yes, delete
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </>
+                        )}
+                    </span>
+                );
+            },
+        },
+    ];
 
     const table = useReactTable({
         data: patients,
@@ -233,7 +249,7 @@ export default function Index({ patients }: AdminPatientsIndexProps) {
                                     <th
                                         key={header.id}
                                         scope="col"
-                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         <div
                                             className="flex cursor-pointer items-center gap-2 select-none"
@@ -278,7 +294,7 @@ export default function Index({ patients }: AdminPatientsIndexProps) {
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
