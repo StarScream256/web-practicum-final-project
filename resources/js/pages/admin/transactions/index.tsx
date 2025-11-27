@@ -27,6 +27,7 @@ import {
     ArrowDown,
     ArrowUp,
     ArrowUpDown,
+    CircleOff,
     Ghost,
     Search,
     View,
@@ -199,7 +200,7 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                     <div className="relative h-fit w-full">
                         <Input
                             type="text"
-                            placeholder="Search appointments"
+                            placeholder="Search transaction"
                             className="pl-10"
                             value={globalFilter ?? ''}
                             onChange={(e) => setGlobalFilter(e.target.value)}
@@ -298,6 +299,13 @@ export default function Index({ transactions }: TransactionsIndexProps) {
                         )}
                     </tbody>
                 </table>
+
+                {transactions.length <= 0 && (
+                    <span className="flex h-fit w-full items-center justify-center gap-3 pt-3">
+                        <CircleOff size={18} />
+                        <p>No available data to display here</p>
+                    </span>
+                )}
 
                 {/* Pagination Section */}
                 {table.getRowModel().rows.length > 0 && (
