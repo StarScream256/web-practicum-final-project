@@ -1,6 +1,6 @@
-import { login } from '@/routes';
+import { home, login } from '@/routes';
 import { store } from '@/routes/register';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -205,15 +205,22 @@ export default function Register() {
                             </div>
                         </div>
                         <div className="flex w-full flex-col items-center gap-2">
-                            <Button
-                                type="submit"
-                                className="mt-2 w-fit"
-                                tabIndex={5}
-                                data-test="register-user-button"
-                            >
-                                {processing && <Spinner />}
-                                Create account
-                            </Button>
+                            <span className="w-fuit flex h-fit gap-5">
+                                <Link href={home().url}>
+                                    <Button variant={'outline'} type="button">
+                                        Back to home
+                                    </Button>
+                                </Link>
+                                <Button
+                                    type="submit"
+                                    className="mt-2 w-fit"
+                                    tabIndex={5}
+                                    data-test="register-user-button"
+                                >
+                                    {processing && <Spinner />}
+                                    Create account
+                                </Button>
+                            </span>
                             <div className="text-center text-sm text-muted-foreground">
                                 Already have an account?{' '}
                                 <TextLink href={login()} tabIndex={6}>

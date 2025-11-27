@@ -8,7 +8,7 @@ export default function AppLogo() {
             </div>
             <div className="ml-1 grid flex-1 text-left text-lg">
                 <span className="truncate font-kaushan-script leading-tight font-semibold">
-                    Tong Fang Clinic
+                    Clinic Tongfang
                 </span>
             </div>
         </>

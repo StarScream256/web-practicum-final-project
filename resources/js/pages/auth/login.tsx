@@ -7,9 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
+import { home } from '@/routes/index';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 
 interface LoginProps {
     status?: string;
@@ -92,16 +93,26 @@ export default function Login({
                                 </div>
 
                                 <span className="flex w-full flex-col items-center justify-center gap-2">
-                                    <Button
-                                        type="submit"
-                                        className="mt-4 w-fit"
-                                        tabIndex={4}
-                                        disabled={processing}
-                                        data-test="login-button"
-                                    >
-                                        {processing && <Spinner />}
-                                        Log in
-                                    </Button>
+                                    <span className="w-fuit flex h-fit gap-5">
+                                        <Link href={home().url}>
+                                            <Button
+                                                variant={'outline'}
+                                                type="button"
+                                            >
+                                                Back to home
+                                            </Button>
+                                        </Link>
+                                        <Button
+                                            type="submit"
+                                            className="w-fit"
+                                            tabIndex={4}
+                                            disabled={processing}
+                                            data-test="login-button"
+                                        >
+                                            {processing && <Spinner />}
+                                            Log in
+                                        </Button>
+                                    </span>
                                     {canRegister && (
                                         <div className="text-center text-sm text-muted-foreground">
                                             Don't have an account?{' '}
