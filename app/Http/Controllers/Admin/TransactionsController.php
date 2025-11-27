@@ -14,18 +14,27 @@ class TransactionsController extends Controller
 {
     public function index(): Response
     {
-        $transactions = Transaction::with(['invoice', 'invoice.appointment.patient', 'invoice.appointment.staff'])->get();
+        $transactions = Transaction::with([
+            'invoice',
+            'invoice.appointment.patient',
+            'invoice.appointment.staff',
+        ])->get();
         return Inertia::render('admin/transactions/index', [
             'transactions' => $transactions,
         ]);
     }
 
-    public function show(): Response
+    public function show(Transaction $transaction): Response
     {
-        $transactions = Transaction::with(['invoice', 'invoice.appointment.patient', 'invoice.appointment.staff'])->get();
+        // $transactions = Transaction::with()->get();
+        $transaction->load([
+            'invoice',
+            'invoice.appointment.patient',
+            'invoice.appointment.staff',
+        ]);
         // Log::info('Appointments retrieved', ['count' => $transactions]);
         return Inertia::render('admin/transactions/show', [
-            'transaction' => $transactions[0],
+            'transaction' => $transaction,
         ]);
     }
 }

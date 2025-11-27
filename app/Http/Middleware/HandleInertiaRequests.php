@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Staff;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -37,6 +39,10 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        if ($user && $user->role->name === 'admin') {
+            $user->load('staff.jobTitle');
+        }
+
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
         return [
@@ -54,6 +60,13 @@ class HandleInertiaRequests extends Middleware
                         'role' => $user->role->name,
                     ]
                     : null,
+                'staff' =>
+                    $user && $user->role->name === 'admin'
+                        ? [
+                            'id' => $user->staff->id,
+                            'job_title' => $user->staff->jobTitle?->title,
+                        ]
+                        : null,
             ],
             'sidebarOpen' =>
                 !$request->hasCookie('sidebar_state') ||

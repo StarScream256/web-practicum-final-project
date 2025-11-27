@@ -66,10 +66,7 @@ class AppointmentsController extends Controller
                 ]);
             });
 
-            return to_route('admin.appointments.index')->with(
-                'success',
-                'Invoice has been created',
-            );
+            return back()->with('success', 'Invoice has been created');
         } catch (Exception $error) {
             Log::error('Error during appointment check-in', [
                 'error' => $error->getMessage(),
@@ -80,6 +77,18 @@ class AppointmentsController extends Controller
             );
         }
     }
+
+    public function markDoctor(Appointment $appointment)
+    {
+        $appointment->update([
+            'seen_by_doctor_time' => Carbon::now('Asia/Jakarta'),
+        ]);
+        return back()->with(
+            'success',
+            'This appointment has been marked as checked by doctor',
+        );
+    }
+
     public function checkout(Invoice $invoice)
     {
         // Log::info('Appointments retrieved', ['count' => $invoice]);
@@ -93,7 +102,7 @@ class AppointmentsController extends Controller
         ]);
     }
 
-    public function transaction(Request $request,Invoice $invoice)
+    public function transaction(Request $request, Invoice $invoice)
     {
         // Log::info('Transaction request received', [
         //     $request,
@@ -108,10 +117,7 @@ class AppointmentsController extends Controller
         ]);
 
         if ($invoice->status === 'paid') {
-            return to_route('admin.appointments.index')->with(
-                'error',
-                'Invoice has already been paid',
-            );
+            return back()->with('error', 'Invoice has already been paid');
         }
 
         try {
@@ -138,15 +144,9 @@ class AppointmentsController extends Controller
                 }
             });
 
-            return to_route('admin.appointments.index')->with(
-                'success',
-                'Payment completed successfully',
-            );
+            return back()->with('success', 'Payment completed successfully');
         } catch (Exception $error) {
-            return to_route('admin.appointments.index')->with(
-                'error',
-                'Payment processing failed',
-            );
+            return back()->with('error', 'Payment processing failed');
         }
     }
 }

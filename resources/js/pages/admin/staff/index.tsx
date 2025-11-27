@@ -83,102 +83,125 @@ interface StaffPageProps extends PageProps {
     staff: Staff[];
 }
 
-const columns: ColumnDef<Staff>[] = [
-    {
-        id: 'rowNumber',
-        header: 'No',
-        accessorFn: (row, index) => index,
-        cell: (info) => info.row.index + 1,
-        enableSorting: true,
-    },
-    {
-        accessorKey: 'name',
-        header: 'Name',
-    },
-    {
-        accessorKey: 'user.email',
-        header: 'Email',
-    },
-    {
-        accessorKey: 'job_title.title',
-        header: 'Job Title',
-    },
-    {
-        accessorKey: 'specialization',
-        header: 'Specialization',
-    },
-    {
-        id: 'actions',
-        header: 'Action',
-        enableSorting: false,
-        cell: ({ row }) => {
-            const staffMember = row.original;
-
-            const handleDelete = () => {
-                router.delete(adminStaffDestroy({ staff: staffMember.id }), {
-                    preserveState: true,
-                    preserveScroll: true,
-                });
-            };
-
-            return (
-                <span className="flex h-fit w-fit items-center gap-3">
-                    <Link href={adminStaffShow({ staff: staffMember.id }).url}>
-                        <View size={18} />
-                    </Link>
-                    <Link href={adminStaffEdit({ staff: staffMember.id }).url}>
-                        <Pencil size={18} />
-                    </Link>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <button className="cursor-pointer text-red-500">
-                                <span className="sr-only">Delete</span>
-                                <Trash size={18} />
-                            </button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>
-                                    Are you absolutely sure?
-                                </DialogTitle>
-                                <DialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete the staff member{' '}
-                                    <strong>{staffMember.name}</strong> and
-                                    their associated user account.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                                <Button
-                                    variant="destructive"
-                                    onClick={handleDelete}
-                                >
-                                    Yes, delete
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                    <Link
-                        href={
-                            adminStaffAvailShow({ staff: staffMember.id }).url
-                        }
-                    >
-                        <CalendarCheck size={18} />
-                    </Link>
-                </span>
-            );
-        },
-    },
-];
-
-export default function Index(props: StaffPageProps) {
-    const { auth, staff } = props;
-
+export default function Index({ auth, staff }: StaffPageProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = useState('');
+
+    const columns: ColumnDef<Staff>[] = [
+        {
+            id: 'rowNumber',
+            header: 'No',
+            accessorFn: (row, index) => index,
+            cell: (info) => info.row.index + 1,
+            enableSorting: true,
+        },
+        {
+            accessorKey: 'name',
+            header: 'Name',
+        },
+        {
+            accessorKey: 'user.email',
+            header: 'Email',
+        },
+        {
+            accessorKey: 'job_title.title',
+            header: 'Job Title',
+        },
+        {
+            accessorKey: 'specialization',
+            header: 'Specialization',
+        },
+        {
+            id: 'actions',
+            header: 'Action',
+            enableSorting: false,
+            cell: ({ row }) => {
+                const staffMember = row.original;
+
+                const handleDelete = () => {
+                    router.delete(
+                        adminStaffDestroy({ staff: staffMember.id }),
+                        {
+                            preserveState: true,
+                            preserveScroll: true,
+                        },
+                    );
+                };
+
+                return (
+                    <span className="flex h-fit w-fit items-center gap-3">
+                        <Link
+                            href={adminStaffShow({ staff: staffMember.id }).url}
+                        >
+                            <View size={18} />
+                        </Link>
+                        {auth.staff?.job_title === 'Manager' && (
+                            <>
+                                <Link
+                                    href={
+                                        adminStaffEdit({
+                                            staff: staffMember.id,
+                                        }).url
+                                    }
+                                >
+                                    <Pencil size={18} />
+                                </Link>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <button className="cursor-pointer text-red-500">
+                                            <span className="sr-only">
+                                                Delete
+                                            </span>
+                                            <Trash size={18} />
+                                        </button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                Are you absolutely sure?
+                                            </DialogTitle>
+                                            <DialogDescription>
+                                                This action cannot be undone.
+                                                This will permanently delete the
+                                                staff member{' '}
+                                                <strong>
+                                                    {staffMember.name}
+                                                </strong>{' '}
+                                                and their associated user
+                                                account.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <DialogFooter>
+                                            <DialogClose asChild>
+                                                <Button variant="outline">
+                                                    Cancel
+                                                </Button>
+                                            </DialogClose>
+                                            <Button
+                                                variant="destructive"
+                                                onClick={handleDelete}
+                                            >
+                                                Yes, delete
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            </>
+                        )}
+                        <Link
+                            href={
+                                adminStaffAvailShow({ staff: staffMember.id })
+                                    .url
+                            }
+                        >
+                            <CalendarCheck size={18} />
+                        </Link>
+                    </span>
+                );
+            },
+        },
+    ];
+    console.log(auth);
 
     const table = useReactTable({
         data: staff,
@@ -220,12 +243,14 @@ export default function Index(props: StaffPageProps) {
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
-                    <Link href={adminStaffCreate()}>
-                        <Button variant={'default'}>
-                            <Contact />
-                            Create Staff
-                        </Button>
-                    </Link>
+                    {auth.staff?.job_title === 'Manager' && (
+                        <Link href={adminStaffCreate()}>
+                            <Button variant={'default'}>
+                                <Contact />
+                                Create Staff
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* table */}
@@ -237,7 +262,7 @@ export default function Index(props: StaffPageProps) {
                                     <th
                                         key={header.id}
                                         scope="col"
-                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         <div
                                             className="flex cursor-pointer items-center gap-2 select-none"
@@ -282,7 +307,7 @@ export default function Index(props: StaffPageProps) {
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

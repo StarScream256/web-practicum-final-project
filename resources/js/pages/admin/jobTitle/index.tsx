@@ -30,7 +30,7 @@ import {
     Trash,
     View,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CreateJobTitleModal from './components/create-job-title-modal';
 import DeleteJobTitleModal from './components/delete-job-title-modal';
 import EditJobTitleModal from './components/edit-job-title-modal';
@@ -68,10 +68,6 @@ export default function Index({ auth, jobTitles }: JobTitlePageProps) {
     const [isShowOpen, setIsShowOpen] = useState(false);
     const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitle>();
 
-    useEffect(() => {
-        console.log(selectedJobTitle);
-    }, [selectedJobTitle]);
-
     const columns: ColumnDef<JobTitle>[] = [
         {
             id: 'rowNumber',
@@ -103,26 +99,30 @@ export default function Index({ auth, jobTitles }: JobTitlePageProps) {
                             {' '}
                             <View size={18} />
                         </button>
-                        <button
-                            onClick={() => {
-                                setSelectedJobTitle(jobTitle);
-                                setIsEditOpen(true);
-                            }}
-                            className="p-1"
-                        >
-                            {' '}
-                            <Pencil size={18} />
-                        </button>
-                        <button
-                            onClick={() => {
-                                setSelectedJobTitle(jobTitle);
-                                setIsDeleteOpen(true);
-                            }}
-                            className="p-1"
-                        >
-                            {' '}
-                            <Trash size={18} className="text-red-500" />
-                        </button>
+                        {auth.staff?.job_title === 'Manager' && (
+                            <>
+                                <button
+                                    onClick={() => {
+                                        setSelectedJobTitle(jobTitle);
+                                        setIsEditOpen(true);
+                                    }}
+                                    className="p-1"
+                                >
+                                    {' '}
+                                    <Pencil size={18} />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedJobTitle(jobTitle);
+                                        setIsDeleteOpen(true);
+                                    }}
+                                    className="p-1"
+                                >
+                                    {' '}
+                                    <Trash size={18} className="text-red-500" />
+                                </button>
+                            </>
+                        )}
                     </span>
                 );
             },
@@ -169,10 +169,12 @@ export default function Index({ auth, jobTitles }: JobTitlePageProps) {
                         />
                         <Search className="absolute top-1/2 left-3 w-5 -translate-y-1/2 text-gray-400" />
                     </div>
-                    <CreateJobTitleModal
-                        open={isCreateOpen}
-                        onOpenChange={setIsCreateOpen}
-                    />
+                    {auth.staff?.job_title === 'Manager' && (
+                        <CreateJobTitleModal
+                            open={isCreateOpen}
+                            onOpenChange={setIsCreateOpen}
+                        />
+                    )}
                 </div>
 
                 {/* table */}
@@ -184,7 +186,7 @@ export default function Index({ auth, jobTitles }: JobTitlePageProps) {
                                     <th
                                         key={header.id}
                                         scope="col"
-                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         <div
                                             className="flex cursor-pointer items-center gap-2 select-none"
@@ -229,7 +231,7 @@ export default function Index({ auth, jobTitles }: JobTitlePageProps) {
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                        className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

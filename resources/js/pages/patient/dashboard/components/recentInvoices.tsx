@@ -1,6 +1,6 @@
 import { Card, CardTitle } from '@/components/ui/card';
 import { toCurrency, toHumanReadableDateTime } from '@/lib/utils';
-import { index as PatientAppointmentIndex } from '@/routes/patient/appointment';
+import { index as patientInvoiceIndex } from '@/routes/patient/invoices';
 import { Link } from '@inertiajs/react';
 import {
     ColumnDef,
@@ -86,7 +86,7 @@ export default function RecentInvoices({ recentInvoices }: RecentInvoicesProp) {
             <span className="flex h-fit w-full justify-between">
                 <CardTitle>Recent Invoices</CardTitle>
                 <Link
-                    href={PatientAppointmentIndex().url}
+                    href={patientInvoiceIndex().url}
                     className="text-sm text-primary hover:underline"
                 >
                     View all invoices
@@ -100,7 +100,7 @@ export default function RecentInvoices({ recentInvoices }: RecentInvoicesProp) {
                                 <th
                                     key={header.id}
                                     scope="col"
-                                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"
+                                    className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-4 dark:text-white"
                                 >
                                     <div className="flex cursor-pointer items-center gap-2 select-none">
                                         {header.isPlaceholder
@@ -122,7 +122,7 @@ export default function RecentInvoices({ recentInvoices }: RecentInvoicesProp) {
                             {row.getVisibleCells().map((cell) => (
                                 <td
                                     key={cell.id}
-                                    className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0 dark:text-white"
+                                    className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-4 dark:text-white"
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,

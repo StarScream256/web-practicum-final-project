@@ -81,27 +81,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('patients')
                 ->name('patients.')
                 ->group(function () {
-                Route::get('', [
-                    AdminPatientController::class,
-                    'index',
-                ])->name('index');
-                Route::get('{patients}/show', [
-                    AdminPatientController::class,
-                    'show',
-                ])->name('show');
-                Route::get('{patients}/edit', [
-                    AdminPatientController::class,
-                    'edit',
-                ])->name('edit');
-                Route::patch('{patients}/update', [
-                    AdminPatientController::class,
-                    'update',
-                ])->name('update');
-                Route::delete('{patients}', [
-                    AdminPatientController::class,
-                    'destroy',
-                ])->name('destroy');
-            });
+                    Route::get('', [
+                        AdminPatientController::class,
+                        'index',
+                    ])->name('index');
+                    Route::get('{patients}/show', [
+                        AdminPatientController::class,
+                        'show',
+                    ])->name('show');
+                    Route::get('{patients}/edit', [
+                        AdminPatientController::class,
+                        'edit',
+                    ])->name('edit');
+                    Route::patch('{patients}/update', [
+                        AdminPatientController::class,
+                        'update',
+                    ])->name('update');
+                    Route::delete('{patients}', [
+                        AdminPatientController::class,
+                        'destroy',
+                    ])->name('destroy');
+                });
 
             // URL: /admin/dashboard/staff/...
             Route::prefix('staff')
@@ -228,6 +228,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminAppointmentsController::class,
                         'checkout',
                     ])->name('checkout');
+                    Route::get('{appointment}/mark-doctor', [
+                        AdminAppointmentsController::class,
+                        'markDoctor',
+                    ])->name('mark-doctor');
                     Route::post('{invoice}/transaction', [
                         AdminAppointmentsController::class,
                         'transaction',
@@ -241,7 +245,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         AdminTransactionsController::class,
                         'index',
                     ])->name('index');
-                    Route::get('{transactions}/show', [
+                    Route::get('{transaction}/show', [
                         AdminTransactionsController::class,
                         'show',
                     ])->name('show');

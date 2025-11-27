@@ -54,6 +54,10 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        staff: {
+            id: number;
+            job_title: string;
+        } | null;
     };
     flash: FlashProps;
 };

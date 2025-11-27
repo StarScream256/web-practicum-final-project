@@ -34,15 +34,19 @@ function isValidDate(date: Date | undefined) {
 
 interface InputCalendarProps {
     label?: string;
+    initialValue?: Date;
     onChange: (date: Date) => void;
 }
 
 export function InputCalendar({
     label = 'Input date',
+    initialValue,
     onChange,
 }: InputCalendarProps) {
     const [open, setOpen] = React.useState(false);
-    const [date, setDate] = React.useState<Date | undefined>(new Date());
+    const [date, setDate] = React.useState<Date | undefined>(
+        initialValue ?? new Date(),
+    );
     const [month, setMonth] = React.useState<Date | undefined>(date);
     const [value, setValue] = React.useState(formatDate(date));
     React.useEffect(() => {

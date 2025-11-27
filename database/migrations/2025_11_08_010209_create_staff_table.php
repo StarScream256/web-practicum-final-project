@@ -21,7 +21,7 @@ return new class extends Migration {
             $table
                 ->foreignId('job_title_id')
                 ->constrained('job_titles', 'id')
-                ->nullOnDelete();
+                ->restrictOnDelete();
             $table->string('specialization');
             $table->text('bio')->nullable();
             $table->string('picture')->nullable();

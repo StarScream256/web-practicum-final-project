@@ -2,15 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
+import { toCurrency, toHumanReadableDateTime } from '@/lib/utils';
 import { dashboard as adminDashboard } from '@/routes/admin';
-import { transaction } from '@/routes/admin/appointments';
-import {
-    index as TransactionsIndex,
-    show as TransactionsShow,
-} from '@/routes/admin/transactions';
+import { index as TransactionsIndex } from '@/routes/admin/transactions';
 
 import { PageProps, type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -19,11 +16,11 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: adminDashboard().url,
     },
     {
-        title: 'Patients',
+        title: 'Transactions',
         href: TransactionsIndex().url,
     },
     {
-        title: 'transactions Details',
+        title: 'Transaction Details',
         href: '',
     },
 ];
@@ -78,13 +75,19 @@ interface DisplayFieldProps {
     className?: string;
 }
 
-export function DisplayField({ label, value, className = '' }: DisplayFieldProps) {
+export function DisplayField({
+    label,
+    value,
+    className = '',
+}: DisplayFieldProps) {
     return (
-        <div className={`flex flex-col ${className}`}>
-            <span className="text-sm font-medium text-gray-700">{label}</span>
-            <span className={`text-base border border-dark p-1 pl-2 rounded-md ${value ? 'text-gray-900' : 'text-gray-400'}`}>
-                {value || 'N/A'}
-            </span>
+        <div className={`flex flex-col gap-3 ${className}`}>
+            <Label>{label}</Label>
+            <Input
+                readOnly
+                className={!value ? 'text-gray-500/70' : ''}
+                value={value || 'N/A'}
+            />
         </div>
     );
 }
@@ -98,58 +101,81 @@ export default function Show(props: TransactionsIndexProps) {
             <div className="grid h-fit grid-cols-2 gap-5 overflow-x-auto rounded-xl p-4">
                 {/* name */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Name" value={transaction.invoice.appointment.patient.name} />
+                    <DisplayField
+                        label="Name"
+                        value={transaction.invoice.appointment.patient.name}
+                    />
                 </div>
 
                 {/* email */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Doctor" value={transaction.invoice.appointment.staff.name} />
+                    <DisplayField
+                        label="Doctor"
+                        value={transaction.invoice.appointment.staff.name}
+                    />
                 </div>
 
                 {/* gender */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Gender" value={transaction.invoice.appointment.patient.gender} />
+                    <DisplayField
+                        label="Gender"
+                        value={transaction.invoice.appointment.patient.gender}
+                    />
                 </div>
 
                 {/* date of birth */}
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Phone" value={transaction.invoice.appointment.patient.phone} />
+                    <DisplayField
+                        label="Phone"
+                        value={transaction.invoice.appointment.patient.phone}
+                    />
                 </div>
 
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Checkin time" value={transaction.invoice.appointment.check_in_time ?
-                        new Date(transaction.invoice.appointment.check_in_time).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }) :
-                        ''} />
+                    <DisplayField
+                        label="Checkin time"
+                        value={
+                            transaction.invoice.appointment.check_in_time
+                                ? toHumanReadableDateTime(
+                                      transaction.invoice.appointment
+                                          .check_in_time,
+                                  )
+                                : ''
+                        }
+                    />
                 </div>
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Checkout time" value={transaction.invoice.appointment.check_out_time ?
-                        new Date(transaction.invoice.appointment.check_out_time).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }) :
-                        ''} />
-                </div>
-
-                <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Payment" value={transaction.payment_method} />
+                    <DisplayField
+                        label="Payment date"
+                        value={toHumanReadableDateTime(
+                            transaction.payment_date,
+                        )}
+                    />
                 </div>
 
                 <div className="flex h-fit w-full flex-col gap-3">
-                    <DisplayField label="Payment Amount" value={transaction.amount_paid} />
+                    <DisplayField
+                        label="Payment method"
+                        value={transaction.payment_method
+                            .split(/[\s,_-]+/)
+                            .map(
+                                (word) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                            )
+                            .join(' ')}
+                    />
+                </div>
+
+                <div className="flex h-fit w-full flex-col gap-3">
+                    <DisplayField
+                        label="Payment Amount"
+                        value={toCurrency(transaction.amount_paid)}
+                    />
                 </div>
 
                 {/* address */}
-                <div className="col-span-2 flex h-fit w-full flex-col gap-3">
-                </div>
+                <div className="col-span-2 flex h-fit w-full flex-col gap-3"></div>
 
                 <div className="col-span-2 flex w-full justify-center gap-5">
                     <Link href={TransactionsIndex().url}>
